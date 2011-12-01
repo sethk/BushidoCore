@@ -2,6 +2,21 @@
 
 // GNUstep-style retain management:
 
+#ifndef __has_feature // Optional of course.
+#define __has_feature(x) 0 // Compatibility with non-clang compilers.
+#endif // __has_feature
+
+#if __has_feature(objc_arc)
+#define AUTORELEASE(a) a
+#define RELEASE(a) a
+#define RETAIN(a) a
+
+#else // !__has_feature(objc_arc)
+
+#define AUTORELEASE(a) [a autorelease]
+#define RELEASE(a) [a release]
+#define RETAIN(a) [a retain]
+
 #define ASSIGN(a, b) do {\
 		const id _a = a, _b = b; \
 		if (_a != _b) { \
@@ -55,6 +70,8 @@ _ASSIGN_COPY(id *pSource, id target)
 }
 
 #define DESTROY(a) do {if (a) {[a release]; a = nil;}} while (0)
+
+#endif // __has_feature(objc_arc)
 
 #define _(s) NSLocalizedString(s, nil)
 #define __(s) s
