@@ -122,9 +122,9 @@
 - (BOOL)getObjectValue:(id *)obj forString:(NSString *)string errorDescription:(NSString **)errorDescription
 {
 	// Don't attempt to format an empty string.
-	if ([string compare:@""] == NSOrderedSame)
+	if ([string isEqualToString:@""])
 	{
-		*obj = @"";
+		*obj = nil;
 		return YES;
 	}
 	
