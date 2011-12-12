@@ -78,7 +78,7 @@ _ASSIGN_COPY(id *pSource, id target)
 
 // A trick for compile-time checking of property names, borrowed from M. Uli Kusterer
 #ifdef DEBUG
-#define PROPERTY(p) NSStringFromSelector(@selector(#p))
+#define PROPERTY(p) NSStringFromSelector(@selector(p))
 #else
 #define PROPERTY(p) @#p
 #endif // DEBUG
