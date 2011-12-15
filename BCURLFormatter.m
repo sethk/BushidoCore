@@ -133,7 +133,7 @@
 	
 	if (!outURL)
 	{
-		*errorDescription = [NSString stringWithFormat:@"Couldn't make  %@ into a well-formed URL", string];
+		*errorDescription = [NSString stringWithFormat:@"Couldn’t make “%@” into a well-formed URL.", string];
 		return NO;
 	}
 
