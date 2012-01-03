@@ -12,7 +12,7 @@
 
 - (void)sizeToFitContents
 {
-	NSUInteger numRows = [self numberOfRows];
+	NSInteger numRows = [self numberOfRows];
 	if (numRows)
 	{
 		NSArray *columns = [self tableColumns];
@@ -22,7 +22,7 @@
 		{
 			NSTableColumn *column = [columns objectAtIndex:columnIndex];
 			CGFloat columnWidth = [column minWidth];
-			for (NSUInteger rowIndex = 0; rowIndex < numRows; ++rowIndex)
+			for (NSInteger rowIndex = 0; rowIndex < numRows; ++rowIndex)
 			{
 				NSCell *cell = [self preparedCellAtColumn:columnIndex row:rowIndex];
 				columnWidth = MAX(columnWidth, [cell cellSize].width);
