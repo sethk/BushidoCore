@@ -8,8 +8,10 @@
 
 #if __has_feature(objc_arc)
 #define AUTORELEASE(a) a
-#define RELEASE(a) a
+#define RELEASE(a) /**/
 #define RETAIN(a) a
+#define DESTROY(a) do {a = nil;} while (0)
+#define SUPER_DEALLOC() /**/
 
 #else // !__has_feature(objc_arc)
 
@@ -70,8 +72,11 @@ _ASSIGN_COPY(id *pSource, id target)
 }
 
 #define DESTROY(a) do {if (a) {[a release]; a = nil;}} while (0)
+#define SUPER_DEALLOC() [super dealloc]
 
 #endif // __has_feature(objc_arc)
+
+#define UNUSED(x) (void)x
 
 #define _(s) NSLocalizedString(s, nil)
 #define __(s) s
