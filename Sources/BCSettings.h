@@ -20,8 +20,12 @@ extern double PTDebugCoefficient;
 
 @end
 
+#if TARGET_OS_IPHONE
+#import <UIKit/UIDevice.h>
+
 @interface UIDevice (BCSettings)
 
 - (NSString *)modelIdentifier;
 
 @end
+#endif // TARGET_OS_IPHONE

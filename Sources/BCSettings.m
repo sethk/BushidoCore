@@ -9,6 +9,7 @@
 #import "BCSettings.h"
 #import <sys/utsname.h>
 
+#if TARGET_OS_IPHONE
 @implementation UIDevice (BCSettings)
 
 - (NSString *)modelIdentifier
@@ -50,6 +51,7 @@
 }
 
 @end
+#endif // TARGET_OS_IPHONE
 
 @implementation BCSettings
 
