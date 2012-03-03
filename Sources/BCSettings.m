@@ -122,6 +122,6 @@
 		return [[NSUserDefaults standardUserDefaults] stringForKey:key];
 }
 
-double PTDebugCoefficient = 1.0;
+double BCDebugCoefficient = 1.0;
 
 @end
