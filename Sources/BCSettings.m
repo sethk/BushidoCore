@@ -66,6 +66,8 @@
 #endif // TARGET_OS_IPHONE
 		NSBundle *bundle = [NSBundle mainBundle];
 		NSString *settingsPath = [bundle pathForResource:plistPrefix ofType:@"plist"];
+		NSAssert1(settingsPath, @"%@ missing from bundle", [plistPrefix stringByAppendingPathExtension:@"plist"]);
+
 		NSMutableDictionary *settings = [NSMutableDictionary dictionaryWithContentsOfFile:settingsPath];
 		NSString *deviceSettingsPath;
 
