@@ -59,7 +59,11 @@
 {
 	if ((self = [super init]))
 	{
-		UIDevice *device = [UIDevice currentDevice];
+#if TARGET_OS_IPHONE
+		NSString *modelIdentifier = [[UIDevice currentDevice] modelIdentifier];
+#else
+		NSString *modelIdentifier = @"Unknown";
+#endif // TARGET_OS_IPHONE
 		NSBundle *bundle = [NSBundle mainBundle];
 		NSString *settingsPath = [bundle pathForResource:plistPrefix ofType:@"plist"];
 		NSMutableDictionary *settings = [NSMutableDictionary dictionaryWithContentsOfFile:settingsPath];
@@ -67,7 +71,7 @@
 
 		NSAssert1(settings, @"Could not load %@", settingsPath);
 		deviceSettingsPath =
-				[bundle pathForResource:[NSString stringWithFormat:@"%@-%@", plistPrefix, device.modelIdentifier]
+				[bundle pathForResource:[NSString stringWithFormat:@"%@-%@", plistPrefix, modelIdentifier]
 								 ofType:@"plist"];
 		if ([[NSFileManager defaultManager] fileExistsAtPath:deviceSettingsPath])
 			[settings addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile:deviceSettingsPath]];
@@ -118,6 +122,6 @@
 		return [[NSUserDefaults standardUserDefaults] stringForKey:key];
 }
 
-double PTDebugCoefficient = 1.0;
+double BCDebugCoefficient = 1.0;
 
 @end

@@ -16,7 +16,7 @@
 - (NSInteger)integerForKey:(NSString *)key;
 - (NSString *)stringForKey:(NSString *)key;
 
-extern double PTDebugCoefficient;
+extern double BCDebugCoefficient;
 
 @end
 

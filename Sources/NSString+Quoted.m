@@ -10,7 +10,7 @@
 #import <wctype.h>
 #import <vis.h>
 
-@implementation NSString (Additions)
+@implementation NSString (Quoted)
 
 - (NSString *)stringByTrimmingWhitesapce
 {
@@ -89,3 +89,8 @@
 }
 
 @end
+
+// Fix linker bug with loading categories from static libs:
+// http://blog.binaryfinery.com/universal-static-library-problem-in-iphone-sd
+@interface String_Quoted_Link_Helper @end
+@implementation String_Quoted_Link_Helper -init {return self;} @end
