@@ -1,3 +1,4 @@
 #include "Base.xcconfig"
 
 GCC_PREPROCESSOR_DEFINITIONS = $(inherit) DEBUG
+BUNDLE_ID_SUFFIX = .debug
