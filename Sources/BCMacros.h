@@ -8,7 +8,7 @@
 
 #if __has_feature(objc_arc)
 #define AUTORELEASE(a) a
-#define RELEASE(a) /**/
+#define RELEASE(a) (void)a
 #define RETAIN(a) a
 #define DESTROY(a) do {a = nil;} while (0)
 #define SUPER_DEALLOC() /**/
