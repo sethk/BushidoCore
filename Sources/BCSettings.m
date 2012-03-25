@@ -66,19 +66,22 @@
 #endif // TARGET_OS_IPHONE
 		NSBundle *bundle = [NSBundle mainBundle];
 		NSString *settingsPath = [bundle pathForResource:plistPrefix ofType:@"plist"];
-		NSAssert1(settingsPath, @"%@ missing from bundle", [plistPrefix stringByAppendingPathExtension:@"plist"]);
+		if (settingsPath)
+		{
+			NSMutableDictionary *settings = [NSMutableDictionary dictionaryWithContentsOfFile:settingsPath];
+			NSString *deviceSettingsPath;
 
-		NSMutableDictionary *settings = [NSMutableDictionary dictionaryWithContentsOfFile:settingsPath];
-		NSString *deviceSettingsPath;
+			NSAssert1(settings, @"Could not load %@", settingsPath);
+			deviceSettingsPath =
+					[bundle pathForResource:[NSString stringWithFormat:@"%@-%@", plistPrefix, modelIdentifier]
+									 ofType:@"plist"];
+			if ([[NSFileManager defaultManager] fileExistsAtPath:deviceSettingsPath])
+				[settings addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile:deviceSettingsPath]];
 
-		NSAssert1(settings, @"Could not load %@", settingsPath);
-		deviceSettingsPath =
-				[bundle pathForResource:[NSString stringWithFormat:@"%@-%@", plistPrefix, modelIdentifier]
-								 ofType:@"plist"];
-		if ([[NSFileManager defaultManager] fileExistsAtPath:deviceSettingsPath])
-			[settings addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile:deviceSettingsPath]];
-
-		[[NSUserDefaults standardUserDefaults] registerDefaults:settings];
+			[[NSUserDefaults standardUserDefaults] registerDefaults:settings];
+		}
+		else
+			NSLog(@"Warning: %@ missing from bundle", [plistPrefix stringByAppendingPathExtension:@"plist"]);
 	}
 
 	return self;
