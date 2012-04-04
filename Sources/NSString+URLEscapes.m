@@ -7,7 +7,6 @@
 //
 
 #import "NSString+URLEscapes.h"
-#import "BCMacros.h"
 #import <CoreFoundation/CFURL.h>
 
 #ifndef UNIT_TESTS

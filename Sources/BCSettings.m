@@ -81,7 +81,8 @@
 			[[NSUserDefaults standardUserDefaults] registerDefaults:settings];
 		}
 		else
-			NSLog(@"Warning: %@ missing from bundle", [plistPrefix stringByAppendingPathExtension:@"plist"]);
+			BCLogLevel(ASL_LEVEL_WARNING, @"Warning: %@ missing from bundle",
+					   [plistPrefix stringByAppendingPathExtension:@"plist"]);
 	}
 
 	return self;

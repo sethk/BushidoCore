@@ -88,3 +88,21 @@ _ASSIGN_COPY(id *pSource, id target)
 #define PROPERTY(p) @#p
 #endif // DEBUG
 
+#import <pthread.h>
+#import <asl.h>
+
+extern pthread_key_t _BCLogKey;
+extern uint32_t _BCLogLevel;
+extern void _BCOpenLog(void);
+
+#define BCLogLevel(level, fmt...) do { \
+		if (!_BCLogKey) \
+			_BCOpenLog(); \
+		if (level <= _BCLogLevel) { /* This is used in addition to the asl_set_filter because sterr is unfiltered */ \
+			aslclient __asl = pthread_getspecific(_BCLogKey); \
+			const char *__utf8_log = [[NSString stringWithFormat:fmt] UTF8String]; \
+			asl_log(__asl, NULL, level, "%s", __utf8_log); \
+		} \
+	} while (0)
+
+#define BCLog(fmt...) BCLogLevel(ASL_LEVEL_NOTICE, fmt)
