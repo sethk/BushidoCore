@@ -1,0 +1,3 @@
+#include "Release.xcconfig"
+
+HEADER_SEARCH_PATHS = "$(INSTALL_ROOT)/usr/local/include"

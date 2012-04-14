@@ -1,0 +1,5 @@
+#include "Distribution.xcconfig"
+
+BUNDLE_ID_SUFFIX = .ad-hoc
+BUNDLE_NAME_SUFFIX = .A
+GCC_PREPROCESSOR_DEFINITIONS = $(inherited) AD_HOC
