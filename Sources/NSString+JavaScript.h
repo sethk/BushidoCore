@@ -14,6 +14,7 @@
 + stringWithJSString:(JSStringRef)JSString;
 + stringWithJSValue:(JSValueRef)JSValue inContext:(JSContextRef)context;
 + (NSString *)JSONStringFromValue:(JSValueRef)JSValue inContext:(JSContextRef)context;
++ (NSString *)stringFromJSException:(JSValueRef)exception inContext:(JSContextRef)context;
 - initWithJSString:(JSStringRef)JSString;
 - initWithJSValue:(JSValueRef)JSValue inContext:(JSContextRef)context;
 - (JSStringRef)createJSString;

@@ -39,6 +39,30 @@
 	return JSONString;
 }
 
++ (NSString *)stringFromJSException:(JSValueRef)exception inContext:(JSContextRef)context
+{
+	NSString *stringValue = [self stringWithJSValue:exception inContext:context];
+	if (JSValueIsObject(context, exception))
+	{
+		JSObjectRef object = JSValueToObject(context, exception, NULL);
+		JSStringRef sourceURLPropertyName = [@"sourceURL" createJSString];
+		JSValueRef sourceURLValue = JSObjectGetProperty(context, object, sourceURLPropertyName, NULL);
+		JSStringRelease(sourceURLPropertyName);
+		JSStringRef linePropertyName = [@"line" createJSString];
+		JSValueRef lineValue = JSObjectGetProperty(context, object, linePropertyName, NULL);
+		JSStringRelease(linePropertyName);
+		stringValue = [NSString stringWithFormat:@"%@:%@: %@",
+					   (sourceURLValue) ? [self stringWithJSValue:sourceURLValue inContext:context] : @"(unknown)",
+					   (lineValue) ? [self stringWithJSValue:lineValue inContext:context] : @"???",
+					   stringValue];
+		if (sourceURLValue)
+			JSValueUnprotect(context, sourceURLValue);
+		if (lineValue)
+			JSValueUnprotect(context, lineValue);
+	}
+	return stringValue;
+}
+
 - initWithJSString:(JSStringRef)JSString
 {
 	if (JSString)
