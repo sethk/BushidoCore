@@ -1,6 +1,6 @@
 //
 //  NSString+URLEscapes.h
-//  BushidoKit
+//  BushidoCore
 //
 //  Created by Seth Kingsley on 7/16/11.
 //  Copyright 2011 Bushido Coding, Inc. All rights reserved.

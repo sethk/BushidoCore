@@ -8,7 +8,6 @@
 
 #import "NSString+JavaScript.h"
 #import <JavaScriptCore/JavaScriptCore.h>
-#import "BCMacros.h"
 
 @implementation NSString (JavaScript)
 

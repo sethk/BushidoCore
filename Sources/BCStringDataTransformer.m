@@ -7,7 +7,6 @@
 //
 
 #import "BCStringDataTransformer.h"
-#import "BCMacros.h"
 
 @implementation BCStringDataTransformer
 

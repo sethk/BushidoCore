@@ -1,6 +1,6 @@
 //
 //  BCSettings.m
-//  BushidoKit
+//  BushidoCore
 //
 //  Created by Seth Kingsley on 2/27/10.
 //  Copyright 2010 __MyCompanyName__. All rights reserved.
@@ -66,17 +66,23 @@
 #endif // TARGET_OS_IPHONE
 		NSBundle *bundle = [NSBundle mainBundle];
 		NSString *settingsPath = [bundle pathForResource:plistPrefix ofType:@"plist"];
-		NSMutableDictionary *settings = [NSMutableDictionary dictionaryWithContentsOfFile:settingsPath];
-		NSString *deviceSettingsPath;
+		if (settingsPath)
+		{
+			NSMutableDictionary *settings = [NSMutableDictionary dictionaryWithContentsOfFile:settingsPath];
+			NSString *deviceSettingsPath;
 
-		NSAssert1(settings, @"Could not load %@", settingsPath);
-		deviceSettingsPath =
-				[bundle pathForResource:[NSString stringWithFormat:@"%@-%@", plistPrefix, modelIdentifier]
-								 ofType:@"plist"];
-		if ([[NSFileManager defaultManager] fileExistsAtPath:deviceSettingsPath])
-			[settings addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile:deviceSettingsPath]];
+			NSAssert1(settings, @"Could not load %@", settingsPath);
+			deviceSettingsPath =
+					[bundle pathForResource:[NSString stringWithFormat:@"%@-%@", plistPrefix, modelIdentifier]
+									 ofType:@"plist"];
+			if ([[NSFileManager defaultManager] fileExistsAtPath:deviceSettingsPath])
+				[settings addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile:deviceSettingsPath]];
 
-		[[NSUserDefaults standardUserDefaults] registerDefaults:settings];
+			[[NSUserDefaults standardUserDefaults] registerDefaults:settings];
+		}
+		else
+			BCLogLevel(ASL_LEVEL_WARNING, @"Warning: %@ missing from bundle",
+					   [plistPrefix stringByAppendingPathExtension:@"plist"]);
 	}
 
 	return self;
@@ -122,6 +128,6 @@
 		return [[NSUserDefaults standardUserDefaults] stringForKey:key];
 }
 
-double PTDebugCoefficient = 1.0;
+double BCDebugCoefficient = 1.0;
 
 @end

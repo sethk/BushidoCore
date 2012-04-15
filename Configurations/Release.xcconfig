@@ -1,0 +1,4 @@
+#include "Base.xcconfig"
+
+GCC_PREPROCESSOR_DEFINITIONS = $(inherit) RELEASE NDEBUG NS_BLOCK_ASSERTIONS
+DEBUG_INFORMATION_FORMAT = dwarf-with-dsym

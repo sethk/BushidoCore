@@ -1,13 +1,12 @@
 //
 //  NSString+URLEscapes.m
-//  BushidoKit
+//  BushidoCore
 //
 //  Created by Seth Kingsley on 7/16/11.
 //  Copyright 2011 Bushido Coding, Inc. All rights reserved.
 //
 
 #import "NSString+URLEscapes.h"
-#import "BCMacros.h"
 #import <CoreFoundation/CFURL.h>
 
 #ifndef UNIT_TESTS
