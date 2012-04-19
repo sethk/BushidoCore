@@ -1,0 +1,93 @@
+BUNDLE_SUFFIX = .app
+BUNDLE_NAME?= $(PRODUCT_NAME)$(BUNDLE_SUFFIX)
+EXECUTABLE_NAME?= $(PRODUCT_NAME)
+EXECUTABLES_PATH = $(BUNDLE_NAME)/Contents/MacOS
+EXECUTABLE_PATH = $(BUNDLE_NAME)/Contents/MacOS/$(EXECUTABLE_NAME)
+RESOURCES_PATH = $(BUNDLE_NAME)/Contents/Resources
+LOCALIZED_RESOURCES_PATH = $(RESOURCES_PATH)/en.lproj
+OBJECTS = $(SOURCES:%.m=%.o)
+
+BUILD_CONFIG?= debug
+
+all: bundle
+
+.PHONY: bundle-skeleton
+bundle-skeleton: $(BUNDLE_NAME)
+
+$(BUNDLE_NAME):
+	@echo Creating $(BUNDLE_NAME)
+	@mkdir -p $(BUNDLE_NAME)/Contents
+	@mkdir -p $(EXECUTABLES_PATH)
+	@mkdir -p $(RESOURCES_PATH)
+	@mkdir -p $(LOCALIZED_RESOURCES_PATH)
+
+INFO_PLIST?= Resources/$(PRODUCT_NAME)-Info.plist
+INFO_PLIST_FLAGS = 
+
+.PHONY: info-plist
+info-plist: bundle-skeleton $(BUNDLE_NAME)/Contents/Info.plist
+INFO_PLIST_FLAGS = $(DEFINES:%=-D%) -DEXECUTABLE_NAME=$(EXECUTABLE_NAME) \
+	-DMACOSX_DEPLOYMENT_TARGET=$(MACOSX_VERSION_MIN) -DPRODUCT_NAME=$(PRODUCT_NAME) \
+	-DPRODUCT_IDENTIFIER=$(shell echo $(PRODUCT_NAME) | tr ' _' '-')
+
+$(BUNDLE_NAME)/Contents/Info.plist: $(INFO_PLIST)
+	@echo "Preprocessing $@"
+	@cpp -P $(INFO_PLIST_FLAGS) $< $@
+
+IBTOOL = ibtool
+IBTOOL_FLAGS = --errors --warnings --output-format human-readable-text
+INSTALLED_NIB_FILES = $(patsubst %,$(LOCALIZED_RESOURCES_PATH)/%,$(notdir $(NIB_FILES:%.xib=%.nib)))
+.PHONY: nib-files
+nib-files: bundle-skeleton $(INSTALLED_NIB_FILES)
+$(LOCALIZED_RESOURCES_PATH)/%.nib: %.xib
+	@echo "Compiling (XIB) $@"
+	@$(IBTOOL) $(IBTOOL_FLAGS) --compile $@ $<
+
+trace:
+	@echo $(INSTALLED_NIB_FILES)
+
+RSYNC_FLAGS = -ru --exclude=.DS_Store --exclude='.svn' --exclude='*.swp'
+.PHONY: resources
+resources: $(RESOURCES)
+	@rsync --out-format="Copying Resource %n" $(RSYNC_FLAGS) $^ $(RESOURCES_PATH)/
+
+.PHONY: localized-resources
+localized-resources: $(LOCALIZED_RESOURCES)
+	@rsync --out-format="Copying Resource (Localized) %n" $(RSYNC_FLAGS) $^ $(LOCALIZED_RESOURCES_PATH)/
+
+CPPFLAGS = $(DEFINES:%=-D%) $(INCLUDE_PATHS:%=-I%)
+PREFIX_HEADER?= Sources/$(PRODUCT_NAME)-Prefix.pch
+PRECOMP_HEADER = $(PREFIX_HEADER:%.pch=%.gch)
+$(OBJECTS): $(PRECOMP_HEADER)
+PREFIX_CPPFLAGS:= $(CPPFLAGS)
+CPPFLAGS+= -include $(PREFIX_HEADER)
+
+%.gch: %.pch
+	@echo "Precompile (ObjC) $@"
+	@$(CC) $(PREFIX_CPPFLAGS) -x objective-c-header -o $@ -c $^
+
+.PHONY: bundle
+bundle: bundle-skeleton resources localized-resources info-plist nib-files $(EXECUTABLE_PATH)
+
+MACOSX_VERSION_MIN?= 10.7
+SDK_NAME?= MacOSX$(MACOSX_VERSION_MIN).sdk
+SDK_PATH = /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/$(SDK_NAME)
+CFLAGS+= -isysroot $(SDK_PATH) -mmacosx-version-min=$(MACOSX_VERSION_MIN)
+
+%.o: %.m
+	@echo "Compiling (ObjC) $@"
+	@$(CC) $(CPPFLAGS) $(CFLAGS) -o $@ -c $<
+
+LDFLAGS?= -ObjC
+
+FRAMEWORKS?= AppKit
+LDLIBS+= $(FRAMEWORKS:%=-framework %)
+
+$(EXECUTABLE_PATH): $(OBJECTS)
+	@echo "Linking $@"
+	@$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^ $(LDLIBS)
+
+.PHONY: clean
+clean:
+	rm -rf $(OBJECTS) $(BUNDLE_NAME)
+

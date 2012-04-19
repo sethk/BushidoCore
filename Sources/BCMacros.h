@@ -46,35 +46,35 @@ _ASSIGN_TEST(id *pSource, id target)
 		return NO;
 }
 
+#define DESTROY(a) do {if (a) {[a release]; a = nil;}} while (0)
+#define SUPER_DEALLOC() [super dealloc]
+
+#endif // __has_feature(objc_arc)
+
 #define ASSIGN_COPY(a, b) do { \
 		const id _a = a, _b = b; \
 		if (_a != _b) { \
 			_a = (_b) ? [_b copy] : nil; \
 			if (_a) \
-				[_a release]; \
+				RELEASE(_a); \
 		} \
 	} while (0)
 
 #define ASSIGN_COPY_TEST(a, b) _ASSIGN_COPY_TEST(&a, b)
 static inline BOOL
-_ASSIGN_COPY(id *pSource, id target)
+_ASSIGN_COPY_TEST(__strong id *pSource, id target)
 {
 	const id source = *pSource;
 	if (source != target)
 	{
 		*pSource = (target) ? [target copy] : nil;
 		if (source)
-			[source release];
+			RELEASE(source);
 		return YES;
 	}
 	else
 		return NO;
 }
-
-#define DESTROY(a) do {if (a) {[a release]; a = nil;}} while (0)
-#define SUPER_DEALLOC() [super dealloc]
-
-#endif // __has_feature(objc_arc)
 
 #define UNUSED(x) (void)x
 
