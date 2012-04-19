@@ -1,3 +1,14 @@
+# CFLAGS - Flags passed to the compiler and linker
+# INCLUDE_PATHS - List of search directories for includes (don't include the -I flag); passed to the preprocessor and compiler
+# DEFINES - List of preprocessor macros (don't include the -D flag); passed to the preprocessor and compiler
+# CPPFLAGS - Flags passed to the preprocessor and compiler
+# WARN_FLAGS - Diagnostic flags passed to the compiler
+# LDFLAGS - Flags passed only to the linker
+# CCFLAGS - Flags passed only to the C compiler
+# OBJCFLAGS - Flags used when compiling Objective-C sources; passed to both the compiler and linker
+# USE_OBJC_ARC - If YES, support Objective-C automatic retain counting
+# BUILD_CONFIG - Either "debug" or "release"; controls optimization and debugging flags
+
 BUNDLE_SUFFIX = .app
 BUNDLE_NAME?= $(PRODUCT_NAME)$(BUNDLE_SUFFIX)
 EXECUTABLE_NAME?= $(PRODUCT_NAME)
@@ -9,7 +20,7 @@ OBJECTS = $(SOURCES:%.m=%.o)
 
 BUILD_CONFIG?= debug
 
-all: bundle
+all: app-bundle
 
 .PHONY: bundle-skeleton
 bundle-skeleton: $(BUNDLE_NAME)
@@ -66,17 +77,40 @@ CPPFLAGS+= -include $(PREFIX_HEADER)
 	@echo "Precompile (ObjC) $@"
 	@$(CC) $(PREFIX_CPPFLAGS) -x objective-c-header -o $@ -c $^
 
-.PHONY: bundle
-bundle: bundle-skeleton resources localized-resources info-plist nib-files $(EXECUTABLE_PATH)
+.PHONY: app-bundle
+app-bundle: bundle-skeleton resources localized-resources info-plist nib-files $(EXECUTABLE_PATH)
 
 MACOSX_VERSION_MIN?= 10.7
 SDK_NAME?= MacOSX$(MACOSX_VERSION_MIN).sdk
 SDK_PATH = /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/$(SDK_NAME)
 CFLAGS+= -isysroot $(SDK_PATH) -mmacosx-version-min=$(MACOSX_VERSION_MIN)
 
+ifeq ($(BUILD_CONFIG), debug)
+    CFLAGS+= -g -fno-inline -O0
+    DEFINES+= DEBUG CONFIG_DEBUG
+else
+    CFLAGS+= -Os
+    DEFINES+= NDEBUG CONFIG_RELEASE NS_BLOCK_ASSERTIONS
+endif
+
+ifeq ($(USE_OBJC_ARC), YES)
+    CFLAGS+= -fobjc-arc
+endif
+
+CCFLAGS+= -std=gnu99 -fpascal-strings -fasm-blocks
+WARN_CFLAGS+= -fmessage-length=0 -Wno-trigraphs -Werror-implicit-function-declaration -Wmissing-field-initializers \
+    -Wmissing-prototypes -Wreturn-type -Wimplicit-atomic-properties -Wformat -Wmissing-braces -Wparentheses -Wswitch \
+    -Wunused-function -Wunused-label -Wno-unused-parameter -Wunused-variable -Wunused-value -Wuninitialized \
+    -Wunknown-pragmas -Wshadow -Wfour-char-constants -Wsign-compare -Wshorten-64-to-32 -Wpointer-sign -Wnewline-eof \
+    -Wno-selector -Wstrict-selector-match -Wundeclared-selector -Wdeprecated-implementations -Wprotocol \
+    -Wdeprecated-declarations -Wconversion -Wsign-conversion
+DEFINES+= "IBOutlet=__attribute__((iboutlet))" \
+    "IBOutletCollection(ClassName)=__attribute__((iboutletcollection(ClassName)))" \
+    "IBAction=void)__attribute__((ibaction)"
+
 %.o: %.m
 	@echo "Compiling (ObjC) $@"
-	@$(CC) $(CPPFLAGS) $(CFLAGS) -o $@ -c $<
+	@$(CC) $(CPPFLAGS) $(CCFLAGS) $(OBJCFLAGS) $(CFLAGS) $(WARN_CFLAGS) -o $@ -c $<
 
 LDFLAGS?= -ObjC
 
@@ -91,3 +125,10 @@ $(EXECUTABLE_PATH): $(OBJECTS)
 clean:
 	rm -rf $(OBJECTS) $(BUNDLE_NAME)
 
+.PHONY: debug
+debug: app-bundle
+	gdb -q $(EXECUTABLE_PATH)
+
+.PHONY: run
+run: app-bundle
+	$(EXECUTABLE_PATH)
