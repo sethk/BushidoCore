@@ -12,11 +12,11 @@ include $(BC_PATH)/Makefiles/Base.gmake
 .PHONY: copy-headers
 copy-headers: $(HEADERS)
 	@mkdir -p $(BUILD_PATH)/$(HEADERS_INSTALL_PATH)
-	@$(RSYNC) $(RSYNC_FLAGS) --out-format="Copying (Header) %n" $^ $(BUILD_PATH)/$(HEADERS_INSTALL_PATH)
+	$(RSYNC) $(RSYNC_FLAGS) --out-format="Copying (Header) %n" $^ $(BUILD_PATH)/$(HEADERS_INSTALL_PATH)
 
 clean::
 	@echo "Cleaning (Headers)"
-	@rm -rf $(BUILD_PATH)/$(HEADERS_INSTALL_PATH)
+	rm -rf $(BUILD_PATH)/$(HEADERS_INSTALL_PATH)
 
 CPPFLAGS+= -Iinclude
 ARFLAGS?= -c
@@ -24,11 +24,11 @@ ARFLAGS?= -c
 static-lib: copy-headers $(BUILD_PATH)/$(EXECUTABLE_PATH)
 
 $(BUILD_PATH)/$(EXECUTABLE_PATH): $(OBJECTS)
-	@mkdir -p $(BUILD_PATH)/$(EXECUTABLES_PATH)
+	mkdir -p $(BUILD_PATH)/$(EXECUTABLES_PATH)
 	@echo "Updating $(EXECUTABLE_PATH)"
-	@$(AR) $(ARFLAGS) -s $@ $?
+	$(AR) $(ARFLAGS) -s $@ $?
 
 clean::
 	@echo "Cleaning (Static Lib)"
-	@rm -f $(BUILD_PATH)/$(EXECUTABLE_PATH)
+	rm -f $(BUILD_PATH)/$(EXECUTABLE_PATH)
 

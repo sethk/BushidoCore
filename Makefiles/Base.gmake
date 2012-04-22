@@ -20,7 +20,7 @@ VPATH+= $(BUILD_PATH)
 
 .PHONY: build-path
 build-path:
-	@mkdir -p $(BUILD_PATH)
+	mkdir -p $(BUILD_PATH)
 
 very-clean:
 	rm -rf $(BUILD_PATH)
@@ -42,7 +42,7 @@ CPPFLAGS+= -include $(notdir $(PREFIX_HEADER))
 
 $(BUILD_PATH)/$(PRECOMP_HEADER): $(PREFIX_HEADER)
 	@echo "Precompile (ObjC) $@"
-	@$(CC) $(PREFIX_CPPFLAGS) -x objective-c-header -o $@ -c $^
+	$(CC) $(PREFIX_CPPFLAGS) -x objective-c-header -o $@ -c $^
 
 ifeq ($(PLATFORM), MacOSX)
 OS_VERSION_MIN?= 10.7
@@ -81,10 +81,12 @@ DEFINES+= "IBOutlet=__attribute__((iboutlet))" \
 
 $(BUILD_PATH)/%.o: %.m
 	@echo "Compiling (ObjC) $@"
-	@$(CC) $(CPPFLAGS) $(CCFLAGS) $(OBJCFLAGS) $(CFLAGS) $(WARN_CFLAGS) -o $@ -c $<
+	$(CC) $(CPPFLAGS) $(CCFLAGS) $(OBJCFLAGS) $(CFLAGS) $(WARN_CFLAGS) -o $@ -c $<
 
 .PHONY: clean
 clean::
 	@echo "Cleaning (Objects)"
-	@rm -f $(OBJECTS)
+	rm -f $(OBJECTS)
 
+trace:
+	echo $(subst Simulator,,$(PLATFORM))

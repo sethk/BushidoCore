@@ -15,10 +15,10 @@ bundle-skeleton: $(BUNDLE_NAME)
 
 $(BUNDLE_NAME):
 	@echo Creating $(BUNDLE_NAME)
-	@mkdir -p $(BUNDLE_NAME)/Contents
-	@mkdir -p $(EXECUTABLES_PATH)
-	@mkdir -p $(RESOURCES_PATH)
-	@mkdir -p $(LOCALIZED_RESOURCES_PATH)
+	mkdir -p $(BUNDLE_NAME)/Contents
+	mkdir -p $(EXECUTABLES_PATH)
+	mkdir -p $(RESOURCES_PATH)
+	mkdir -p $(LOCALIZED_RESOURCES_PATH)
 
 INFO_PLIST?= Resources/$(PRODUCT_NAME)-Info.plist
 INFO_PLIST_FLAGS = 
@@ -31,7 +31,7 @@ INFO_PLIST_FLAGS = $(DEFINES:%=-D%) -DEXECUTABLE_NAME=$(EXECUTABLE_NAME) \
 
 $(BUNDLE_NAME)/Contents/Info.plist: $(INFO_PLIST)
 	@echo "Preprocessing $@"
-	@cpp -P $(INFO_PLIST_FLAGS) $< $@
+	cpp -P $(INFO_PLIST_FLAGS) $< $@
 
 IBTOOL = ibtool
 IBTOOL_FLAGS = --errors --warnings --output-format human-readable-text
@@ -41,15 +41,15 @@ INSTALLED_NIB_FILES = $(patsubst %,$(LOCALIZED_RESOURCES_PATH)/%,$(notdir $(NIB_
 nib-files: bundle-skeleton $(INSTALLED_NIB_FILES)
 $(LOCALIZED_RESOURCES_PATH)/%.nib: %.xib
 	@echo "Compiling (XIB) $@"
-	@$(IBTOOL) $(IBTOOL_FLAGS) --compile $@ $<
+	$(IBTOOL) $(IBTOOL_FLAGS) --compile $@ $<
 
 .PHONY: resources
 resources: $(RESOURCES)
-	@$(RSYNC) --out-format="Copying Resource %n" $(RSYNC_FLAGS) $^ $(RESOURCES_PATH)/
+	$(RSYNC) --out-format="Copying Resource %n" $(RSYNC_FLAGS) $^ $(RESOURCES_PATH)/
 
 .PHONY: localized-resources
 localized-resources: $(LOCALIZED_RESOURCES)
-	@$(RSYNC) --out-format="Copying Resource (Localized) %n" $(RSYNC_FLAGS) $^ $(LOCALIZED_RESOURCES_PATH)/
+	$(RSYNC) --out-format="Copying Resource (Localized) %n" $(RSYNC_FLAGS) $^ $(LOCALIZED_RESOURCES_PATH)/
 
 .PHONY: app-bundle
 app-bundle: bundle-skeleton resources localized-resources info-plist nib-files $(EXECUTABLE_PATH)
@@ -63,7 +63,7 @@ include Base.gmake
 
 $(EXECUTABLE_PATH): $(OBJECTS)
 	@echo "Linking $@"
-	@$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^ $(LDLIBS)
+	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^ $(LDLIBS)
 
 .PHONY: clean
 clean:
