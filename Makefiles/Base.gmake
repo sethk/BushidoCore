@@ -47,9 +47,11 @@ $(BUILD_PATH)/$(PRECOMP_HEADER): $(PREFIX_HEADER)
 ifeq ($(PLATFORM), MacOSX)
 OS_VERSION_MIN?= 10.7
 CFLAGS+= -mmacosx-version-min=$(OS_VERSION_MIN)
-else ifeq ($(subst Simulator,,$(PLATFORM)), iPhoneOS)
+else ifeq ($(findstring iPhone,$(PLATFORM)), iPhone)
 OS_VERSION_MIN?= 5.1
 CFLAGS+= -miphoneos-version-min=$(OS_VERSION_MIN)
+else
+$(error Unsupported platform “$(PLATFORM)”)
 endif
 
 SDK_NAME?= $(PLATFORM)$(OS_VERSION_MIN).sdk
