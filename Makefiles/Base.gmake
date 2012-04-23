@@ -36,7 +36,6 @@ CPPFLAGS = -Wcomment -Wundef -Wendif-labels $(DEFINES:%=-D%) $(INCLUDE_PATHS:%=-
 
 PREFIX_HEADER?= Sources/$(PRODUCT_NAME)-Prefix.pch
 PRECOMP_HEADER = $(notdir $(addsuffix $(PREFIX_HEADER),.gch))
-$(SOURCES): $(BUILD_PATH)/$(PRECOMP_HEADER)
 PREFIX_CPPFLAGS:= $(CPPFLAGS)
 CPPFLAGS+= -include $(notdir $(PREFIX_HEADER))
 
