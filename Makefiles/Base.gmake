@@ -67,7 +67,7 @@ else
 endif
 
 ifeq ($(USE_OBJC_ARC), YES)
-    CFLAGS+= -fobjc-arc
+    CFLAGS+= -fobjc-arc -fobjc-abi-version=2 -fobjc-legacy-dispatch
 endif
 
 CCFLAGS+= -std=gnu99 -fpascal-strings -fasm-blocks
