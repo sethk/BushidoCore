@@ -4,76 +4,121 @@
 
 BUNDLE_SUFFIX = .app
 BUNDLE_NAME?= $(PRODUCT_NAME)$(BUNDLE_SUFFIX)
-EXECUTABLES_PATH = $(BUNDLE_NAME)/Contents/MacOS
-RESOURCES_PATH = $(BUNDLE_NAME)/Contents/Resources
+ifeq ($(PLATFORM), iPhoneOS)
+CONTENTS_PATH = $(BUNDLE_NAME)
+EXECUTABLES_PATH = $(BUNDLE_NAME)
+RESOURCES_PATH = $(BUNDLE_NAME)
+else
+CONTENTS_PATH = $(BUNDLE_NAME)/Contents
+EXECUTABLES_PATH = $(CONTENTS_PATH)/MacOS
+RESOURCES_PATH = $(CONTENTS_PATH)/Resources
+endif
 LOCALIZED_RESOURCES_PATH = $(RESOURCES_PATH)/en.lproj
 
-all: app-bundle
+.PHONY: app-bundle
+app-bundle: bundle-skeleton info-plist nib-files app
+
+RUN_DEFINED = YES
+
+include $(BC_PATH)/Makefiles/App.gmake
 
 .PHONY: bundle-skeleton
-bundle-skeleton: $(BUNDLE_NAME)
+bundle-skeleton: $(BUILD_PATH)/$(BUNDLE_NAME)
 
-$(BUNDLE_NAME):
-	@echo Creating $(BUNDLE_NAME)
-	mkdir -p $(BUNDLE_NAME)/Contents
-	mkdir -p $(EXECUTABLES_PATH)
-	mkdir -p $(RESOURCES_PATH)
-	mkdir -p $(LOCALIZED_RESOURCES_PATH)
+$(BUILD_PATH)/$(BUNDLE_NAME): build-path
+	@echo Creating $(BUILD_PATH)/$(BUNDLE_NAME)
+	mkdir -p $(BUILD_PATH)/$(CONTENTS_PATH)
 
-INFO_PLIST?= Resources/$(PRODUCT_NAME)-Info.plist
+INFO_PLIST?= $(PRODUCT_NAME)-Info.plist
 INFO_PLIST_FLAGS = 
+PRODUCT_IDENTIFIER = $(shell echo $(PRODUCT_NAME) | tr ' _' '-')
+ifeq ($(BUILD_CONFIG), Debug)
+PRODUCT_ID_SUFFIX = .debug
+DISPLAY_NAME_SUFFIX = .D
+endif
 
 .PHONY: info-plist
-info-plist: bundle-skeleton $(BUNDLE_NAME)/Contents/Info.plist
-INFO_PLIST_FLAGS = $(DEFINES:%=-D%) -DEXECUTABLE_NAME=$(EXECUTABLE_NAME) \
+info-plist: bundle-skeleton $(BUILD_PATH)/$(CONTENTS_PATH)/Info.plist
+INFO_PLIST_FLAGS = $(DEFINES:%=-D%) -D'JOIN(a,b)=a\#\#b' -DEXECUTABLE_NAME=$(EXECUTABLE_NAME) \
 	-DMACOSX_DEPLOYMENT_TARGET=$(MACOSX_VERSION_MIN) -DPRODUCT_NAME=$(PRODUCT_NAME) \
-	-DPRODUCT_IDENTIFIER=$(shell echo $(PRODUCT_NAME) | tr ' _' '-')
+	-DBUNDLE_ID_PREFIX=$(BUNDLE_ID_PREFIX) -DPRODUCT_IDENTIFIER=$(PRODUCT_IDENTIFIER)$(PRODUCT_ID_SUFFIX) \
+	-DDISPLAY_NAME_SUFFIX=$(DISPLAY_NAME_SUFFIX)
 
-$(BUNDLE_NAME)/Contents/Info.plist: $(INFO_PLIST)
+$(BUILD_PATH)/$(CONTENTS_PATH)/Info.plist: $(INFO_PLIST)
 	@echo "Preprocessing $@"
 	cpp -P $(INFO_PLIST_FLAGS) $< $@
 
 IBTOOL = ibtool
-IBTOOL_FLAGS = --errors --warnings --output-format human-readable-text
-INSTALLED_NIB_FILES = $(patsubst %,$(LOCALIZED_RESOURCES_PATH)/%,$(notdir $(NIB_FILES:%.xib=%.nib)))
+IBTOOL_FLAGS = --errors --warnings --output-format human-readable-text --sdk $(SDK_PATH)
+INSTALLED_NIB_FILES = $(patsubst %,$(BUILD_PATH)/$(LOCALIZED_RESOURCES_PATH)/%,$(NIB_FILES:%.xib=%.nib))
+INSTALLED_STORYBOARDS = \
+	$(patsubst %,$(BUILD_PATH)/$(LOCALIZED_RESOURCES_PATH)/%,$(STORYBOARD_FILES:%.storyboard=%.storyboardc))
 
 .PHONY: nib-files
-nib-files: bundle-skeleton $(INSTALLED_NIB_FILES)
-$(LOCALIZED_RESOURCES_PATH)/%.nib: %.xib
+nib-files: bundle-skeleton $(INSTALLED_NIB_FILES) $(INSTALLED_STORYBOARDS)
+
+$(BUILD_PATH)/$(LOCALIZED_RESOURCES_PATH)/%.nib: %.xib
 	@echo "Compiling (XIB) $@"
 	$(IBTOOL) $(IBTOOL_FLAGS) --compile $@ $<
 
-.PHONY: resources
-resources: $(RESOURCES)
-	$(RSYNC) --out-format="Copying Resource %n" $(RSYNC_FLAGS) $^ $(RESOURCES_PATH)/
+$(BUILD_PATH)/$(LOCALIZED_RESOURCES_PATH)/%.storyboardc: %.storyboard
+	@echo "Compiling (Storyboard) $@"
+	$(IBTOOL) $(IBTOOL_FLAGS) --compile $@ $<
 
-.PHONY: localized-resources
-localized-resources: $(LOCALIZED_RESOURCES)
-	$(RSYNC) --out-format="Copying Resource (Localized) %n" $(RSYNC_FLAGS) $^ $(LOCALIZED_RESOURCES_PATH)/
+trace::
+	echo $(BUILD_PATH)/$(LOCALIZED_RESOURCES_PATH)
 
-.PHONY: app-bundle
-app-bundle: bundle-skeleton resources localized-resources info-plist nib-files $(EXECUTABLE_PATH)
+.PHONY: copy-provision
+copy-provision:
+	@echo "Copying (Provisioning profile $(PROVISIONING_ID))"
+	cp ~/Library/MobileDevice/Provisioning\ Profiles/$(PROVISIONING_ID).mobileprovision \
+	    $(BUILD_PATH)/$(RESOURCES_PATH)/embedded.mobileprovision
 
-FRAMEWORKS?= AppKit
-LDLIBS+= $(FRAMEWORKS:%=-framework %)
+.PHONY: entitlements
+entitlements: $(BUILD_PATH)/$(PRODUCT_NAME).xcent
 
-LDFLAGS?= -ObjC
+$(BUILD_PATH)/$(PRODUCT_NAME).xcent: $(ENTITLEMENTS)
+	@echo "Preprocessing $(ENTITLEMENTS)"
+	cpp -P $(INFO_PLIST_FLAGS) $< $@
 
-include Base.gmake
+clean::
+	@echo "Cleaning (Entitlements)"
+	rm -f $(BUILD_PATH)/$(PRODUCT_NAME).xcent
 
-$(EXECUTABLE_PATH): $(OBJECTS)
-	@echo "Linking $@"
-	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^ $(LDLIBS)
+RESOURCE_RULES?= $(SDK_PATH)/ResourceRules.plist
+
+.PHONY: copy-resource-rules
+copy-resource-rules:
+	@echo "Copying (Resource Rules)"
+	cp $(RESOURCE_RULES) $(BUILD_PATH)/$(RESOURCES_PATH)/
+
+CODESIGN_IDENTITY?= "iPhone Developer"
+
+.PHONY: code-sign
+code-sign: copy-provision entitlements copy-resource-rules
+	@echo "Signing $(BUILD_PATH)/$(EXECUTABLE_PATH)"
+	env CODESIGN_ALLOCATE=$(PLATFORM_PATH)/Developer/usr/bin/codesign_allocate \
+	    codesign -f -s $(CODESIGN_IDENTITY) \
+	    --entitlements $(BUILD_PATH)/$(PRODUCT_NAME).xcent \
+	    --resource-rules=$(BUILD_PATH)/$(RESOURCES_PATH)/ResourceRules.plist \
+	    $(BUILD_PATH)/$(BUNDLE_NAME)
 
 .PHONY: clean
-clean:
-	@echo "Cleaning (App Bundle)
-	rm -rf $(BUNDLE_NAME)
+clean::
+	@echo "Cleaning (App Bundle)"
+	rm -rf $(BUILD_PATH)/$(BUNDLE_NAME)
+
+GDB?= $(PLATFORM_PATH)/Developer/usr/bin/gdb
 
 .PHONY: debug
-debug: app-bundle
-	gdb -q $(EXECUTABLE_PATH)
+debug: app-bundle code-sign
+	$(GDB) -q $(BUILD_PATH)/$(EXECUTABLE_PATH)
 
 .PHONY: run
-run: app-bundle
-	$(EXECUTABLE_PATH)
+run: app-bundle code-sign
+ifeq ($(PLATFORM), iPhoneOS)
+	fruitstrap -d -v -b $(BUILD_PATH)/$(BUNDLE_NAME)
+else
+	$(BUILD_PATH)/$(EXECUTABLE_PATH)
+endif
+

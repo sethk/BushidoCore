@@ -34,7 +34,23 @@ RSYNC_FLAGS = -ru --exclude=.DS_Store --exclude='.svn' --exclude='*.swp'
 
 CPPFLAGS = -Wcomment -Wundef -Wendif-labels $(DEFINES:%=-D%) $(INCLUDE_PATHS:%=-I%)
 
-PREFIX_HEADER?= Sources/$(PRODUCT_NAME)-Prefix.pch
+ifeq ($(PLATFORM), MacOSX)
+OS_VERSION_MIN?= 10.7
+CPPFLAGS+= -mmacosx-version-min=$(OS_VERSION_MIN)
+else ifeq ($(findstring iPhone,$(PLATFORM)), iPhone)
+OS_VERSION_MIN?= 5.1
+CPPFLAGS+= -miphoneos-version-min=$(OS_VERSION_MIN)
+else
+$(error Unsupported platform “$(PLATFORM)”)
+endif
+
+SDK_NAME?= $(PLATFORM)$(OS_VERSION_MIN).sdk
+DEVELOPER_PATH?= /Applications/Xcode.app/Contents/Developer
+PLATFORM_PATH = $(DEVELOPER_PATH)/Platforms/$(PLATFORM).platform
+SDK_PATH = $(PLATFORM_PATH)/Developer/SDKs/$(SDK_NAME)
+CFLAGS+= -arch $(ARCH) -isysroot $(SDK_PATH)
+
+PREFIX_HEADER?= $(PRODUCT_NAME)-Prefix.pch
 PRECOMP_HEADER = $(notdir $(addsuffix $(PREFIX_HEADER),.gch))
 $(SOURCES): $(BUILD_PATH)/$(PRECOMP_HEADER)
 PREFIX_CPPFLAGS:= $(CPPFLAGS)
@@ -42,21 +58,7 @@ CPPFLAGS+= -include $(notdir $(PREFIX_HEADER))
 
 $(BUILD_PATH)/$(PRECOMP_HEADER): $(PREFIX_HEADER)
 	@echo "Precompile (ObjC) $@"
-	$(CC) $(PREFIX_CPPFLAGS) -x objective-c-header -o $@ -c $^
-
-ifeq ($(PLATFORM), MacOSX)
-OS_VERSION_MIN?= 10.7
-CFLAGS+= -mmacosx-version-min=$(OS_VERSION_MIN)
-else ifeq ($(findstring iPhone,$(PLATFORM)), iPhone)
-OS_VERSION_MIN?= 5.1
-CFLAGS+= -miphoneos-version-min=$(OS_VERSION_MIN)
-else
-$(error Unsupported platform “$(PLATFORM)”)
-endif
-
-SDK_NAME?= $(PLATFORM)$(OS_VERSION_MIN).sdk
-SDK_PATH = /Applications/Xcode.app/Contents/Developer/Platforms/$(PLATFORM).platform/Developer/SDKs/$(SDK_NAME)
-CFLAGS+= -arch $(ARCH) -isysroot $(SDK_PATH)
+	$(CC) $(PREFIX_CPPFLAGS) $(CFLAGS) -x objective-c-header -o $@ -c $^
 
 ifeq ($(BUILD_CONFIG), Debug)
     CFLAGS+= -g -fno-inline -O0
@@ -70,7 +72,10 @@ ifeq ($(USE_OBJC_ARC), YES)
     CFLAGS+= -fobjc-arc -fobjc-abi-version=2 -fobjc-legacy-dispatch
 endif
 
-CCFLAGS+= -std=gnu99 -fpascal-strings -fasm-blocks
+CCFLAGS+= -std=gnu99 -fpascal-strings
+ifneq ($(findstring arm, $(ARCH)), arm)
+CCFLAGS+= -fasm-blocks
+endif
 WARN_CFLAGS+= -fmessage-length=0 -Wno-trigraphs -Werror-implicit-function-declaration -Wmissing-field-initializers \
     -Wmissing-prototypes -Wreturn-type -Wimplicit-atomic-properties -Wformat -Wmissing-braces -Wparentheses -Wswitch \
     -Wunused-function -Wunused-label -Wno-unused-parameter -Wunused-variable -Wunused-value -Wuninitialized \
@@ -90,5 +95,5 @@ clean::
 	@echo "Cleaning (Objects)"
 	rm -f $(OBJECTS)
 
-trace:
+trace::
 	echo $(subst Simulator,,$(PLATFORM))
