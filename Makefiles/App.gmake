@@ -1,7 +1,6 @@
 EXECUTABLE_NAME = $(PRODUCT_NAME)
 
 include $(BC_PATH)/Makefiles/Base.gmake
-all: 
 .DEFAULT_GOAL = app
 .PHONY: app
 app: resources localized-resources $(BUILD_PATH)/$(EXECUTABLE_PATH)

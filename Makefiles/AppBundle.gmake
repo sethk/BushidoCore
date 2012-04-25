@@ -58,10 +58,12 @@ INSTALLED_STORYBOARDS = \
 nib-files: bundle-skeleton $(INSTALLED_NIB_FILES) $(INSTALLED_STORYBOARDS)
 
 $(BUILD_PATH)/$(LOCALIZED_RESOURCES_PATH)/%.nib: %.xib
+	mkdir -p $(BUILD_PATH)/$(LOCALIZED_RESOURCES_PATH)
 	@echo "Compiling (XIB) $@"
 	$(IBTOOL) $(IBTOOL_FLAGS) --compile $@ $<
 
 $(BUILD_PATH)/$(LOCALIZED_RESOURCES_PATH)/%.storyboardc: %.storyboard
+	mkdir -p $(BUILD_PATH)/$(LOCALIZED_RESOURCES_PATH)
 	@echo "Compiling (Storyboard) $@"
 	$(IBTOOL) $(IBTOOL_FLAGS) --compile $@ $<
 
