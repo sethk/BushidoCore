@@ -18,6 +18,10 @@ PLATFORM?= MacOSX
 BUILD_PATH?= $(ARCH)-$(PLATFORM)-$(BUILD_CONFIG)
 VPATH+= $(BUILD_PATH)
 
+.DEFAULT_GOAL = all
+.PHONY: all
+all: $(ALL_TARGETS)
+
 .PHONY: build-path
 build-path:
 	mkdir -p $(BUILD_PATH)

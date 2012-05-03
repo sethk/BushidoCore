@@ -5,7 +5,7 @@ HEADERS_INSTALL_PATH?= include/$(PRODUCT_NAME)
 EXECUTABLE_NAME?= lib$(PRODUCT_NAME).a
 EXECUTABLES_PATH = lib
 
-all: build-path static-lib
+ALL_TARGETS = static-lib
 
 include $(BC_PATH)/Makefiles/Base.gmake
 
@@ -21,7 +21,7 @@ clean::
 CPPFLAGS+= -Iinclude
 ARFLAGS?= -c
 
-static-lib: copy-headers $(BUILD_PATH)/$(EXECUTABLE_PATH)
+static-lib: build-path copy-headers $(BUILD_PATH)/$(EXECUTABLE_PATH)
 
 $(BUILD_PATH)/$(EXECUTABLE_PATH): $(OBJECTS)
 	mkdir -p $(BUILD_PATH)/$(EXECUTABLES_PATH)

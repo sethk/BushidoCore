@@ -17,12 +17,14 @@ RESOURCES_PATH = $(CONTENTS_PATH)/Resources
 endif
 LOCALIZED_RESOURCES_PATH = $(RESOURCES_PATH)/en.lproj
 
-.PHONY: app-bundle
-app-bundle: bundle-skeleton info-plist nib-files app
-
 RUN_DEFINED = YES
 
+ALL_TARGETS = app-bundle
+
 include $(BC_PATH)/Makefiles/App.gmake
+
+.PHONY: app-bundle
+app-bundle: bundle-skeleton info-plist nib-files app
 
 .PHONY: bundle-skeleton
 bundle-skeleton: $(BUILD_PATH)/$(BUNDLE_PATH)
