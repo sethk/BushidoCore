@@ -54,6 +54,9 @@ PLATFORM_PATH = $(DEVELOPER_PATH)/Platforms/$(PLATFORM).platform
 SDK_PATH = $(PLATFORM_PATH)/Developer/SDKs/$(SDK_NAME)
 CFLAGS+= -arch $(ARCH) -isysroot $(SDK_PATH)
 
+VERSION = $(shell git describe --tags --dirty --always --abbrev=6)
+DEFINES+= VERSION="$(VERSION)"
+
 PREFIX_HEADER?= $(PRODUCT_NAME)-Prefix.pch
 PRECOMP_HEADER = $(notdir $(addsuffix $(PREFIX_HEADER),.gch))
 $(SOURCES): $(BUILD_PATH)/$(PRECOMP_HEADER)
