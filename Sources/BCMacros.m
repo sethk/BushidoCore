@@ -8,33 +8,39 @@
 
 #include "BCMacros.h"
 
+pthread_once_t _BCLogKeyOnce = PTHREAD_ONCE_INIT;
 pthread_key_t _BCLogKey;
-uint32_t _BCLogLevel;
+uint32_t BCLogLevel;
 
 void
-_BCOpenLog(void)
+_BCCreateLogKey(void)
+{
+	pthread_key_create(&_BCLogKey, NULL);
+}
+
+aslclient
+BCOpenLog(const char *facility)
 {
 	const char *logLevelString = getenv("BCLogLevel");
 	if (logLevelString)
-		_BCLogLevel = (uint32_t)fmin(fmax((uint32_t)atol(logLevelString), 0), ASL_LEVEL_DEBUG);
+		BCLogLevel = (uint32_t)fmin(fmax((uint32_t)atol(logLevelString), 0), ASL_LEVEL_DEBUG);
 	else
 	{
 #ifdef DEBUG
-		_BCLogLevel = ASL_LEVEL_INFO;
+		BCLogLevel = ASL_LEVEL_INFO;
 #elif TARGET_OS_EMBEDDED
 		// Limit the chatter on iOS:
-		_BCLogLevel = ASL_LEVEL_WARNING;
+		BCLogLevel = ASL_LEVEL_WARNING;
 #else
-		_BCLogLevel = ASL_LEVEL_NOTICE;
+		BCLogLevel = ASL_LEVEL_NOTICE;
 #endif // DEBUG
 	}
 
-	pthread_key_create(&_BCLogKey, NULL);
-	aslclient asl = asl_open(NULL, NULL, 0);
+	aslclient asl = asl_open(NULL, facility, 0);
 #ifdef DEBUG
 	asl_add_log_file(asl, STDERR_FILENO);
 #endif // DEBUG
-	asl_set_filter(asl, ASL_FILTER_MASK_UPTO(_BCLogLevel));
+	asl_set_filter(asl, ASL_FILTER_MASK_UPTO(BCLogLevel));
 	static const char *logLevelNames[] =
 	{
 		[ASL_LEVEL_EMERG] = ASL_STRING_EMERG,
@@ -48,6 +54,8 @@ _BCOpenLog(void)
 	};
 	asl_log(asl, NULL, ASL_LEVEL_NOTICE,
 			"Log started, filtering messages above <%s>, set BCLogLevel in the environment to change",
-			logLevelNames[_BCLogLevel]);
+			logLevelNames[BCLogLevel]);
+	pthread_once(&_BCLogKeyOnce, _BCCreateLogKey); \
 	pthread_setspecific(_BCLogKey, asl);
+	return asl;
 }

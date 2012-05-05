@@ -91,15 +91,18 @@ _ASSIGN_COPY_TEST(__strong id *pSource, id target)
 #import <pthread.h>
 #import <asl.h>
 
+extern pthread_once_t _BCLogKeyOnce;
 extern pthread_key_t _BCLogKey;
-extern uint32_t _BCLogLevel;
-extern void _BCOpenLog(void);
+extern uint32_t BCLogLevel;
+extern void _BCCreateLogKey(void);
+extern aslclient BCOpenLog(const char *facility);
 
 #define BCLogLevel(level, fmt...) do { \
-		if (!_BCLogKey) \
-			_BCOpenLog(); \
-		if (level <= _BCLogLevel) { /* This is used in addition to the asl_set_filter because sterr is unfiltered */ \
-			aslclient __asl = pthread_getspecific(_BCLogKey); \
+		pthread_once(&_BCLogKeyOnce, _BCCreateLogKey); \
+		aslclient __asl = pthread_getspecific(_BCLogKey); \
+		if (!__asl) \
+			__asl = BCOpenLog(NULL); \
+		if (level <= BCLogLevel) { /* This is used in addition to the asl_set_filter because sterr is unfiltered */ \
 			const char *__utf8_log = [[NSString stringWithFormat:fmt] UTF8String]; \
 			asl_log(__asl, NULL, level, "%s", __utf8_log); \
 		} \
