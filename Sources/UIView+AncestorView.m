@@ -1,3 +1,5 @@
+#import "UIView+AncestorView.h"
+
 @implementation UIView (AncestorView)
 
 - (UIView *)ancestorViewOfKindClass:(Class)class
