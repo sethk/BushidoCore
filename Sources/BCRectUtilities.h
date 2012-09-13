@@ -18,24 +18,22 @@ BCRectAspectFit(CGRect containerRect, CGSize contentSize)
 		containerRect.size.width = 1;
 	CGFloat containerAspect = CGRectGetHeight(containerRect) / CGRectGetWidth(containerRect);
 	CGRect scaledRect;
-	if (contentAspect >= containerAspect)
+	if (containerAspect < contentAspect)
 	{
-		CGFloat scaledWidth = roundf(CGRectGetHeight(containerRect) * contentAspect);
+		CGFloat scaledWidth = roundf(CGRectGetHeight(containerRect) / contentAspect);
 		CGFloat xOffset = roundf((CGRectGetWidth(containerRect) - scaledWidth) / 2);
 		scaledRect = CGRectMake(CGRectGetMinX(containerRect) + xOffset, CGRectGetMinY(containerRect),
 								scaledWidth, CGRectGetHeight(containerRect));
 	}
 	else
 	{
-		CGFloat scaledHeight = roundf(CGRectGetWidth(containerRect) / contentAspect);
+		CGFloat scaledHeight = roundf(CGRectGetWidth(containerRect) * contentAspect);
 		CGFloat yOffset = roundf((CGRectGetHeight(containerRect) - scaledHeight) / 2);
 		scaledRect = CGRectMake(CGRectGetMinX(containerRect), CGRectGetMinY(containerRect) + yOffset,
 								CGRectGetWidth(containerRect), scaledHeight);
 	}
 	POSTCONDITION_C(CGRectContainsRect(containerRect, scaledRect));
 	POSTCONDITION_C(CGRectEqualToRect(scaledRect, CGRectIntegral(scaledRect)));
-	POSTCONDITION_C((contentSize.height / contentSize.width) ==
-					(CGRectGetHeight(scaledRect) / CGRectGetWidth(scaledRect)));
 	return scaledRect;
 }
 
