@@ -8,6 +8,7 @@
 
 #include "BCMacros.h"
 
+#ifdef BCLOG_USE_ASL
 pthread_once_t _BCLogKeyOnce = PTHREAD_ONCE_INIT;
 pthread_key_t _BCLogKey;
 uint32_t BCLogLevel;
@@ -59,3 +60,4 @@ BCOpenLog(const char *facility)
 	pthread_setspecific(_BCLogKey, asl);
 	return asl;
 }
+#endif // BCLOG_USE_ASL

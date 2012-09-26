@@ -18,6 +18,10 @@ PLATFORM?= MacOSX
 BUILD_PATH?= $(ARCH)-$(PLATFORM)-$(BUILD_CONFIG)
 VPATH+= $(BUILD_PATH)
 
+.DEFAULT_GOAL = all
+.PHONY: all
+all: $(ALL_TARGETS)
+
 .PHONY: build-path
 build-path:
 	mkdir -p $(BUILD_PATH)
@@ -49,6 +53,9 @@ DEVELOPER_PATH?= /Applications/Xcode.app/Contents/Developer
 PLATFORM_PATH = $(DEVELOPER_PATH)/Platforms/$(PLATFORM).platform
 SDK_PATH = $(PLATFORM_PATH)/Developer/SDKs/$(SDK_NAME)
 CFLAGS+= -arch $(ARCH) -isysroot $(SDK_PATH)
+
+VERSION = $(shell git describe --tags --dirty --always --abbrev=6)
+DEFINES+= VERSION="$(VERSION)"
 
 PREFIX_HEADER?= $(PRODUCT_NAME)-Prefix.pch
 PRECOMP_HEADER = $(notdir $(addsuffix $(PREFIX_HEADER),.gch))
