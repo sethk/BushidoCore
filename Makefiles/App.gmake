@@ -1,0 +1,48 @@
+EXECUTABLE_NAME = $(PRODUCT_NAME)
+
+ALL_TARGETS = app
+
+include $(BC_PATH)/Makefiles/Base.gmake
+
+.PHONY: app
+app: resources localized-resources $(BUILD_PATH)/$(EXECUTABLE_PATH)
+
+FRAMEWORKS?= AppKit
+CFLAGS+= $(FRAMEWORK_PATHS:%=-F%)
+LDLIBS+= $(FRAMEWORKS:%=-framework %)
+
+LDFLAGS?= -ObjC
+
+$(BUILD_PATH)/$(EXECUTABLE_PATH): $(OBJECTS) $(LDADD)
+	mkdir -p $(BUILD_PATH)/$(EXECUTABLES_PATH)
+	@echo "Linking $@"
+	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $(OBJECTS) $(LDADD) $(LDLIBS)
+
+.PHONY: resources
+resources: $(RESOURCES)
+	mkdir -p $(BUILD_PATH)/$(RESOURCES_PATH)
+	$(RSYNC) --out-format="Copying Resource %n" $(RSYNC_FLAGS) $^ $(BUILD_PATH)/$(RESOURCES_PATH)/
+
+.PHONY: localized-resources
+localized-resources: $(LOCALIZED_RESOURCES)
+ifdef $(LOCALIZED_RESOURCES)
+	mkdir -p $(BUILD_PATH)/$(LOCALIZED_RESOURCES_PATH)
+	$(RSYNC) --out-format="Copying Resource (Localized) %n" $(RSYNC_FLAGS) $^ \
+		$(BUILD_PATH)/$(LOCALIZED_RESOURCES_PATH)/
+endif
+
+ifneq ($(RUN_DEFINED), YES)
+.PHONY: run
+run: app
+	(cd $(BUILD_PATH)/$(EXECUTABLES_PATH) && ./$(EXECUTABLE_NAME))
+
+debug: app
+	(cd $(BUILD_PATH)/$(EXECUTABLES_PATH) && gdb $(EXECUTABLE_NAME))
+endif
+
+clean::
+	echo "Cleaning (Application)"
+	rm -f $(BUILD_PATH)/$(EXECUTABLE_PATH)
+
+trace::
+	echo $(OBJECTS) $(LDADD) $(LDLIBS)
