@@ -1,4 +1,4 @@
 #include "Base.xcconfig"
 
-GCC_PREPROCESSOR_DEFINITIONS = UNIT_TESTS
+GCC_PREPROCESSOR_DEFINITIONS = $(inherited) UNIT_TESTS
 GCC_WARN_PEDANTIC = NO // SenTest can't pass this
