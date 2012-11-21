@@ -4,11 +4,11 @@
 
 + (void)replaceView:(UIView *)view withView:(UIView *)newView
 {
-	CGRect frame = [view frame];
+	[newView setFrame:[view frame]];
+	[newView setAutoresizingMask:[view autoresizingMask]];
 	UIView *superview = [view superview];
 	NSUInteger subviewIndex = [[superview subviews] indexOfObject:view];
 	[view removeFromSuperview];
-	[newView setFrame:frame];
 	[superview insertSubview:newView atIndex:(signed)subviewIndex];
 }
 
