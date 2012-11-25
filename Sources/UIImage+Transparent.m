@@ -50,15 +50,20 @@ _releaseTransparentInfo(void *info)
 	};
 	struct transparentBytesContext *info = CFAllocatorAllocate(kCFAllocatorDefault, sizeof(*info), 0);
 	CGDataProviderRef dataProvider = CGDataProviderCreateSequential(info, &callbacks);
+	CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
 	CGImageRef CGImage = CGImageCreate((size_t)size.width, (size_t)size.height,
 									   8, 32, (size_t)size.width * 4,
-									   CGColorSpaceCreateDeviceRGB(),
+									   colorSpace,
 									   kCGImageAlphaFirst | kCGBitmapByteOrderDefault,
 									   dataProvider,
 									   NULL,
 									   false,
 									   kCGRenderingIntentDefault);
-	return [[UIImage alloc] initWithCGImage:CGImage];
+	CGColorSpaceRelease(colorSpace);
+	CGDataProviderRelease(dataProvider);
+	UIImage *image = [[UIImage alloc] initWithCGImage:CGImage];
+	CGImageRelease(CGImage);
+	return image;
 }
 
 @end
