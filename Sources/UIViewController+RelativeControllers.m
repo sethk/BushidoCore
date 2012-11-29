@@ -1,16 +1,16 @@
 //
-//  UIViewController+PresentationContext.m
+//  UIViewController+RelativeControllers.m
 //  BushidoCore
 //
 //  Created by Seth Kingsley on 8/6/12.
 //  Copyright (c) 2012 Bushido Coding. All rights reserved.
 //
 
-#import "UIViewController+PresentationContext.h"
+#import "UIViewController+RelativeControllers.h"
 
-@implementation UIViewController (PresentationContext)
+@implementation UIViewController (RelativeControllers)
 
-- (UIView *)viewForCurrentContext
+- (UIViewController *)viewControllerForCurrentContext
 {
 	UIViewController *contextViewController = self;
 	while (contextViewController && ![contextViewController definesPresentationContext])
@@ -23,7 +23,7 @@
 		else
 			break;
 	}
-	return [contextViewController view];
+	return contextViewController;
 }
 
 @end

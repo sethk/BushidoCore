@@ -1,5 +1,5 @@
 //
-//  UIViewController+PresentationContext.h
+//  UIViewController+RelativeControllers.h
 //  BushidoCore
 //
 //  Created by Seth Kingsley on 8/6/12.
@@ -8,8 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-@interface UIViewController (PresentationContext)
+@interface UIViewController (RelativeControllers)
 
-- (UIView *)viewForCurrentContext;
+- (UIViewController *)viewControllerForCurrentContext;
 
 @end
