@@ -12,11 +12,16 @@
 
 - (UIViewController *)highestVisibleViewController
 {
-	UIViewController *rootViewController = [self rootViewController];
-	if ([rootViewController isKindOfClass:[UINavigationController class]])
-		return [(UINavigationController *)rootViewController visibleViewController];
-	else
-		return rootViewController;
+	UIViewController *viewController = [self rootViewController];
+	while (1)
+	{
+		UIViewController *presentedViewController = [viewController presentedViewController];
+		if (presentedViewController &&
+				[presentedViewController modalPresentationStyle] == UIModalPresentationFullScreen)
+			viewController = presentedViewController;
+		else
+			return viewController;
+	}
 }
 
 @end
