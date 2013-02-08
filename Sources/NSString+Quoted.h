@@ -3,7 +3,7 @@
 //  BushidoCore
 //
 //  Created by Seth Kingsley on 4/11/11.
-//  Copyright 2011 __MyCompanyName__. All rights reserved.
+//  Copyright © 2011 Bushido Coding. All rights reserved.
 //
 
 @interface NSString (Quoted)

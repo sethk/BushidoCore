@@ -1,9 +1,9 @@
 //
 //  BCObjectModeling.h
-//  ClearCostMobile
+//  BushidoCore
 //
 //  Created by Seth Kingsley on 2/6/13.
-//  Copyright (c) 2013 Monkey Republic Design, LLC. All rights reserved.
+//  Copyright © 2013 Bushido Coding, LLC. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
