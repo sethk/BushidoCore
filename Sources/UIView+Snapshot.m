@@ -3,7 +3,7 @@
 //  BushidoCore
 //
 //  Created by Seth Kingsley on 7/24/12.
-//  Copyright (c) 2012 Bushido Coding. All rights reserved.
+//  Copyright © 2012 Bushido Coding. All rights reserved.
 //
 
 #import "UIView+Snapshot.h"

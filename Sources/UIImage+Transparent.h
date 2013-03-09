@@ -1,9 +1,9 @@
 //
 //  UIImage+Transparent.h
-//  MBTI
+//  BushidoCore
 //
 //  Created by Seth Kingsley on 11/19/12.
-//  Copyright (c) 2012 Monkey Republic Design, LLC. All rights reserved.
+//  Copyright © 2012 Bushido Coding. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>

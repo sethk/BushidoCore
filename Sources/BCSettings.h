@@ -3,7 +3,7 @@
 //  BushidoCore
 //
 //  Created by Seth Kingsley on 2/27/10.
-//  Copyright 2010 __MyCompanyName__. All rights reserved.
+//  Copyright © 2010 Bushido Coding. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>

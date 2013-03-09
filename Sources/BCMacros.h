@@ -1,4 +1,5 @@
 // Common macros for Objective-C programs.
+#import <Foundation/NSObject.h>
 
 // GNUstep-style retain management:
 

@@ -3,7 +3,7 @@
 //  BushidoCore
 //
 //  Created by Seth Kingsley on 8/6/12.
-//  Copyright (c) 2012 Bushido Coding. All rights reserved.
+//  Copyright © 2012 Bushido Coding. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>

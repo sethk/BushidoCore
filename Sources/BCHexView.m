@@ -1,9 +1,9 @@
 //
 //  HexView.m
-//  Packetizer
+//  BushidoCore
 //
 //  Created by Seth Kingsley on 10/15/06.
-//  Copyright 2006 __MyCompanyName__. All rights reserved.
+//  Copyright © 2006 Bushido Coding. All rights reserved.
 //
 
 #import "BCHexView.h"

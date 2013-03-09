@@ -1,9 +1,9 @@
 //
 //  NSError+CFStreamError.h
-//  DealSteal
+//  BushidoCore
 //
 //  Created by Seth Kingsley on 3/26/12.
-//  Copyright (c) 2012 Bushido Coding. All rights reserved.
+//  Copyright © 2012 Bushido Coding. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
