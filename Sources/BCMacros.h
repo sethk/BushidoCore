@@ -149,6 +149,23 @@ enum
 #define BCLogLevel(l, fmt...) do {if (l <= ASL_LEVEL_NOTICE) NSLog(fmt);} while (0)
 #endif // DEBUG
 
+// Safe object comparison:
+//                 obj1
+//          nil | 0x1234 | 0x789a |
+// obj2   +-----+--------+--------+
+// nil    | YES | NO     | NO     |
+// 0x1234 | NO  | YES    | MAYBE  |
+// 0x789a | NO  | MAYBE  | YES    |
+//        +-----+--------+--------+
+//                                                                           obj1
+//                             nil                   |                      0x1234                   |                    0x789a                     |
+// obj2   +------------------------------------------+-----------------------------------------------+-----------------------------------------------+
+// nil    | (nil == nil || [nil isEqual:nil])        | (0x1234 == nil || [0x1234 isEqual:nil])       | (0x789a == nil || [0x789a isEqual:nil])       |
+// 0x1234 | (nil == 0x1234) || [nil isEqual:0x1234]) | (0x1234 == 0x1234 || [0x1234 isEqual:0x1234]) | (0x789a == 0x1234 || [0x789a isEqual:0x1234]) |
+// 0x789a | (nil == 0x789a) || [nil isEqual:0x789a]) | (0x1234 == 0x789a || [0x1234 isEqual:0x789a]) | (0x789a == 0x789a || [0x789a isEqual:0x789a]) |
+//        +------------------------------------------+-----------------------------------------------+-----------------------------------------------+
+#define BC_SAFE_OBJECT_IS_EQUAL(obj1, obj2) ((obj1) == (obj2) || [(obj1) isEqual:obj2])
+
 #endif // !BCLOG_USE_ASL
 
 #ifdef DEBUG
