@@ -150,3 +150,11 @@ enum
 #endif // DEBUG
 
 #endif // !BCLOG_USE_ASL
+
+#ifdef DEBUG
+#define BCCONST_TUNABLE volatile
+#else
+#define BCCONST_TUNABLE const
+#endif // DEBUG
+
+#define BCRectMakeConst(_x, _y, _w, _h) {.origin = {.x = _x, .y = _y}, .size = {.width = _w, .height = _h}}
