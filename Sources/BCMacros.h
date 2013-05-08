@@ -175,3 +175,4 @@ enum
 #endif // DEBUG
 
 #define BCRectMakeConst(_x, _y, _w, _h) {.origin = {.x = _x, .y = _y}, .size = {.width = _w, .height = _h}}
+#define BCSizeMakeConst(_w, _h) {.width = _w, .height = _h}
