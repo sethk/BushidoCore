@@ -3,7 +3,7 @@
 //  BushidoCore
 //
 //  Created by Seth Kingsley on 7/24/12.
-//  Copyright (c) 2012 Bushido Coding. All rights reserved.
+//  Copyright © 2012 Bushido Coding. All rights reserved.
 //
 
 #import "UIView+Snapshot.h"
@@ -16,13 +16,15 @@
 {
 	CGRect frame = [self frame];
 	UIImageView *imageView = AUTORELEASE([[UIImageView alloc] initWithFrame:frame]);
+	BOOL isOpaque = [self isOpaque];
+	[imageView setOpaque:isOpaque];
 	UIScreen *screen = [[self window] screen];
 	if (!screen)
 	{
 		NSLog(@"Warning: Making snapshot of view that isn't on screen, defaulting to main screen's scale");
 		screen = [UIScreen mainScreen];
 	}
-	UIGraphicsBeginImageContextWithOptions(frame.size, [self isOpaque], [screen scale]);
+	UIGraphicsBeginImageContextWithOptions(frame.size, isOpaque, [screen scale]);
 	[[self layer] renderInContext:UIGraphicsGetCurrentContext()];
 	[imageView setImage:UIGraphicsGetImageFromCurrentImageContext()];
 	UIGraphicsEndImageContext();

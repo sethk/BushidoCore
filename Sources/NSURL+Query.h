@@ -3,7 +3,7 @@
 //  BushidoCore
 //
 //  Created by Seth Kingsley on 7/9/11.
-//  Copyright 2011 Bushido Coding, Inc. All rights reserved.
+//  Copyright © 2011 Bushido Coding, Inc. All rights reserved.
 //
 
 @interface NSURL (Query)

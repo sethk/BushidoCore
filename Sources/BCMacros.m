@@ -1,9 +1,9 @@
 //
 //  BCMacros.c
-//  DealSteal
+//  BushidoCore
 //
 //  Created by Seth Kingsley on 4/3/12.
-//  Copyright (c) 2012 Bushido Coding. All rights reserved.
+//  Copyright © 2012 Bushido Coding. All rights reserved.
 //
 
 #include "BCMacros.h"

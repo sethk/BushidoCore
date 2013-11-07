@@ -1,9 +1,9 @@
 //
 //  NSString+JavaScript.h
-//  BushidoKit
+//  BushidoCore
 //
 //  Created by Seth Kingsley on 2/3/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
+//  Copyright © 2012 Bushido Coding. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
