@@ -76,7 +76,7 @@
     if (![[theURL scheme] length])
     {
 		// first try just correcting percent escapes
-		NSString *newURLString = [URLString stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding];
+		NSString *newURLString = [URLString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
 		theURL = [NSURL URLWithString:newURLString];
 		
 		if (![[theURL scheme] length])
@@ -133,7 +133,8 @@
 	
 	if (!outURL)
 	{
-		*errorDescription = [NSString stringWithFormat:@"Couldn’t make “%@” into a well-formed URL.", string];
+		if (errorDescription)
+			*errorDescription = [NSString stringWithFormat:@"Couldn’t make “%@” into a well-formed URL.", string];
 		return NO;
 	}
 
