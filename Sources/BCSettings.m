@@ -45,6 +45,10 @@
 			return @"iPhone4";
         else if (!strcmp(u.machine, "iPhone3,2"))
             return @"iPhone4S";
+		else if (!strcmp(u.machine, "iPhone5,1") || !strcmp(u.machine, "iPhone5,2") || !strcmp(u.machine, "iPhone5,3"))
+			return @"iPhone5";
+		else if (!strcmp(u.machine, "iPhone6,1") || !strcmp(u.machine, "iPhone6,2"))
+			return @"iPhone5s";
 	}
 
 	return @"Unknown";
