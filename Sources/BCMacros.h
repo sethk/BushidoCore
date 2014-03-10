@@ -1,105 +1,50 @@
 // Common macros for Objective-C programs.
 #import <Foundation/NSObject.h>
 
-// GNUstep-style retain management:
-
-#ifndef __has_feature // Optional of course.
-#define __has_feature(x) 0 // Compatibility with non-clang compilers.
-#endif // __has_feature
-
-#if __has_feature(objc_arc)
-#define AUTORELEASE(a) a
-#define RELEASE(a) (void)a
-#define RETAIN(a) a
-#define DESTROY(a) do {a = nil;} while (0)
-#define SUPER_DEALLOC() /**/
-
-#else // !__has_feature(objc_arc)
-
-#define AUTORELEASE(a) [a autorelease]
-#define RELEASE(a) [a release]
-#define RETAIN(a) [a retain]
-
-#define ASSIGN(a, b) do {\
-		const id _a = a, _b = b; \
-		if (_a != _b) { \
-			if (_b) [_b retain]; \
-			a = _b; \
-			if (_a) [_a release]; \
-		} \
-	} while (0)
-
-#define ASSIGN_TEST(a, b) _ASSIGN_TEST(&a, b)
-static inline BOOL
-_ASSIGN_TEST(id *pSource, id target)
-{
-	const id source = *pSource;
-	if (source != target)
-	{
-		if (target)
-			[target retain];
-		*pSource = target;
-		if (source)
-			[source release];
-		return YES;
-	}
-	else
-		return NO;
-}
-
-#define DESTROY(a) do {if (a) {[a release]; a = nil;}} while (0)
-#define SUPER_DEALLOC() [super dealloc]
-
-#endif // __has_feature(objc_arc)
-
-#define ASSIGN_COPY(a, b) do { \
+#define BC_ASSIGN_COPY(a, b) do { \
 		const id _a = a, _b = b; \
 		if (_a != _b) { \
 			_a = (_b) ? [_b copy] : nil; \
-			if (_a) \
-				RELEASE(_a); \
 		} \
 	} while (0)
 
-#define ASSIGN_COPY_TEST(a, b) _ASSIGN_COPY_TEST(&a, b)
+#define BC_ASSIGN_COPY_TEST(a, b) _BC_ASSIGN_COPY_TEST(&a, b)
 static inline BOOL
-_ASSIGN_COPY_TEST(__strong id *pSource, id target)
+_BC_ASSIGN_COPY_TEST(__strong id *pSource, id target)
 {
 	const id source = *pSource;
 	if (source != target)
 	{
 		*pSource = (target) ? [target copy] : nil;
-		if (source)
-			RELEASE(source);
 		return YES;
 	}
 	else
 		return NO;
 }
 
-#define UNUSED(x) (void)x
+#define BC_UNUSED(x) (void)x
 
 #define _(s) NSLocalizedString(s, nil)
 #define __(s) s
 
 // Design by contract:
 #ifdef DEBUG
-#define PRECONDITION(x) NSAssert(x, @"Precondition failed: %s", #x)
-#define POSTCONDITION(x) NSAssert(y, @"Postcondition failed: %s", #x)
-#define PRECONDITION_C(x) NSCAssert(x, @"Precondition failed: %s", #x)
-#define POSTCONDITION_C(x) NSCAssert(x, @"Postcondition failed: %s", #x)
+#define BC_PRECONDITION(x) NSAssert(x, @"Precondition failed: %s", #x)
+#define BC_POSTCONDITION(x) NSAssert(x, @"Postcondition failed: %s", #x)
+#define BC_PRECONDITION_C(x) NSCAssert(x, @"Precondition failed: %s", #x)
+#define BC_POSTCONDITION_C(x) NSCAssert(x, @"Postcondition failed: %s", #x)
 #else // DEBUG
-#define PRECONDITION(x)
-#define POSTCONDITION(x)
-#define PRECONDITION_C(x)
-#define POSTCONDITION_C(x)
+#define BC_PRECONDITION(x)
+#define BC_POSTCONDITION(x)
+#define BC_PRECONDITION_C(x)
+#define BC_POSTCONDITION_C(x)
 #endif // DEBUG
 
 // A trick for compile-time checking of property names, borrowed from M. Uli Kusterer
 #ifdef DEBUG
-#define PROPERTY(p) NSStringFromSelector(@selector(p))
+#define BC_PROPERTY(p) NSStringFromSelector(@selector(p))
 #else
-#define PROPERTY(p) @#p
+#define BC_PROPERTY(p) @#p
 #endif // DEBUG
 
 #ifdef BCLOG_USE_ASL
@@ -160,7 +105,7 @@ enum
 //                                                                           obj1
 //                             nil                   |                      0x1234                   |                    0x789a                     |
 // obj2   +------------------------------------------+-----------------------------------------------+-----------------------------------------------+
-// nil    | (nil == nil || [nil isEqual:nil])        | (0x1234 == nil || [0x1234 isEqual:nil])       | (0x789a == nil || [0x789a isEqual:nil])       |
+// nil    | (nil == nil     || [nil isEqual:nil])    | (0x1234 == nil    || [0x1234 isEqual:nil])    | (0x789a == nil    || [0x789a isEqual:nil])    |
 // 0x1234 | (nil == 0x1234) || [nil isEqual:0x1234]) | (0x1234 == 0x1234 || [0x1234 isEqual:0x1234]) | (0x789a == 0x1234 || [0x789a isEqual:0x1234]) |
 // 0x789a | (nil == 0x789a) || [nil isEqual:0x789a]) | (0x1234 == 0x789a || [0x1234 isEqual:0x789a]) | (0x789a == 0x789a || [0x789a isEqual:0x789a]) |
 //        +------------------------------------------+-----------------------------------------------+-----------------------------------------------+
@@ -169,9 +114,9 @@ enum
 #endif // !BCLOG_USE_ASL
 
 #ifdef DEBUG
-#define BCCONST_TUNABLE volatile
+#define BC_CONST_TUNABLE volatile
 #else
-#define BCCONST_TUNABLE const
+#define BC_CONST_TUNABLE const
 #endif // DEBUG
 
 #define BCRectMakeConst(_x, _y, _w, _h) {.origin = {.x = _x, .y = _y}, .size = {.width = _w, .height = _h}}
