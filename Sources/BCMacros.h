@@ -40,11 +40,21 @@ _BC_ASSIGN_COPY_TEST(__strong id *pSource, id target)
 #define BC_POSTCONDITION_C(x)
 #endif // DEBUG
 
+static inline NSString *
+BCPropertyNameFromBOOLAccessorName(NSString *name)
+{
+	BC_PRECONDITION_C([name hasPrefix:@"is"]);
+	return [NSString stringWithFormat:@"%C%@",
+			[[name lowercaseString] characterAtIndex:2], [name substringFromIndex:3]];
+}
+
 // A trick for compile-time checking of property names, borrowed from M. Uli Kusterer
 #ifdef DEBUG
 #define BC_PROPERTY(p) NSStringFromSelector(@selector(p))
+#define BC_BOOL_PROPERTY(p) BCPropertyNameFromBOOLAccessorName(NSStringFromSelector(@selector(p)))
 #else
 #define BC_PROPERTY(p) @#p
+#define BC_PROPERTY(p) BCPropertyNameFromBOOLAccessorName(@#p)
 #endif // DEBUG
 
 #ifdef BCLOG_USE_ASL
