@@ -122,3 +122,4 @@ enum
 #define BCRectMakeConst(_x, _y, _w, _h) {.origin = {.x = _x, .y = _y}, .size = {.width = _w, .height = _h}}
 #define BCSizeMakeConst(_w, _h) {.width = _w, .height = _h}
 #define BCEdgeInsetsMakeConst(_t, _l, _b, _r) {.top = _t, .left = _l, .bottom = _b, .right = _r}
+#define BCStringFromBOOL(b) ((b) ? @"YES" : @"NO")
