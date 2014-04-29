@@ -32,8 +32,8 @@ BCRectAspectFit(CGRect containerRect, CGSize contentSize)
 		scaledRect = CGRectMake(CGRectGetMinX(containerRect), CGRectGetMinY(containerRect) + yOffset,
 								CGRectGetWidth(containerRect), scaledHeight);
 	}
-	POSTCONDITION_C(CGRectContainsRect(containerRect, scaledRect));
-	POSTCONDITION_C(CGRectEqualToRect(scaledRect, CGRectIntegral(scaledRect)));
+	BC_POSTCONDITION_C(CGRectContainsRect(containerRect, scaledRect));
+	BC_POSTCONDITION_C(CGRectEqualToRect(scaledRect, CGRectIntegral(scaledRect)));
 	return scaledRect;
 }
 

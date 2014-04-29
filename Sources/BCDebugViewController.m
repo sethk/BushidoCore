@@ -58,9 +58,9 @@ static _RKlcl_level_t kHighLogLevel = RKLogLevelTrace;
 	if (object == [NSUserDefaults standardUserDefaults])
 	{
 		if ([keyPath isEqualToString:kNetworkLogLevelDefaultsKey])
-			RKLogConfigureByName("RestKit/Network*", [[object valueForKey:keyPath] unsignedIntegerValue])
+			RKLogConfigureByName("RestKit/Network*", [[object valueForKey:keyPath] unsignedLongValue])
 		else if ([keyPath isEqualToString:kObjectLogLevelDefaultsKey])
-			RKLogConfigureByName("RestKit/ObjectMapping", [[object valueForKey:keyPath] unsignedIntegerValue])
+			RKLogConfigureByName("RestKit/ObjectMapping", [[object valueForKey:keyPath] unsignedLongValue])
 	}
 }
 
