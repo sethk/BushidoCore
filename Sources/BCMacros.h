@@ -54,7 +54,7 @@ BCPropertyNameFromBOOLAccessorName(NSString *name)
 #define BC_BOOL_PROPERTY(p) BCPropertyNameFromBOOLAccessorName(NSStringFromSelector(@selector(p)))
 #else
 #define BC_PROPERTY(p) @#p
-#define BC_PROPERTY(p) BCPropertyNameFromBOOLAccessorName(@#p)
+#define BC_BOOL_PROPERTY(p) BCPropertyNameFromBOOLAccessorName(@#p)
 #endif // DEBUG
 
 #ifdef BCLOG_USE_ASL
