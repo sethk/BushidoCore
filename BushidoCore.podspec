@@ -8,9 +8,9 @@ Pod::Spec.new do |s|
   s.source           = { :git => "https://github.com/sethk/BushidoCore.git", :tag => s.version.to_s }
   s.requires_arc = true
 
-  s.source_files = 'Sources/BC{Macros,URLFormatter,NSError+Generic}.[hm]'
+  s.source_files = 'Sources/{BCMacros,BCURLFormatter,NSError+Generic}.[hm]'
   s.preserve_paths = 'Configurations/*.xcconfig'
   #s.ios.resources = 'Resources'
 
-  s.public_header_files = 'Sources/BC{Macros,RectUtilities,URLFormatter,NSError+Generic}.h'
+  s.public_header_files = 'Sources/{BCMacros,BCRectUtilities,BCURLFormatter,NSError+Generic}.h'
 end
