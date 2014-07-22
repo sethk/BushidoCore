@@ -12,5 +12,5 @@ Pod::Spec.new do |s|
   s.preserve_paths = 'Configurations/*.xcconfig'
   #s.ios.resources = 'Resources'
 
-  s.public_header_files = 'Sources/BC{Macros,RectUtilities,URLFormatter}.h'
+  s.public_header_files = 'Sources/BC{Macros,RectUtilities,URLFormatter,NSError+Generic}.h'
 end
