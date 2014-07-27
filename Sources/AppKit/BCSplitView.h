@@ -6,7 +6,7 @@
 //  Copyright © 2011 Bushido Coding. All rights reserved.
 //
 
-#interface <AppKit/NSSplitView.h>
+#import <AppKit/NSSplitView.h>
 
 @interface BCSplitView : NSSplitView
 

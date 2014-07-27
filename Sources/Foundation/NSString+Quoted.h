@@ -6,6 +6,8 @@
 //  Copyright © 2011 Bushido Coding. All rights reserved.
 //
 
+#import <Foundation/Foundation.h>
+
 @interface NSString (Quoted)
 
 - (NSString *)stringByTrimmingWhitesapce;

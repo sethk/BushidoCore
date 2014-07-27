@@ -6,7 +6,7 @@
 //  Copyright © 2012 Bushido Coding. All rights reserved.
 //
 
-#import <UIKit/UIView.h>
+#import <UIKit/UIKit.h>
 
 @interface UIView (Snapshot)
 

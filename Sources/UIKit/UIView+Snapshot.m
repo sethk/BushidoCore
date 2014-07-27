@@ -15,7 +15,7 @@
 - (UIImageView *)imageViewWithSnapshot
 {
 	CGRect frame = [self frame];
-	UIImageView *imageView = AUTORELEASE([[UIImageView alloc] initWithFrame:frame]);
+	UIImageView *imageView = [[UIImageView alloc] initWithFrame:frame];
 	BOOL isOpaque = [self isOpaque];
 	[imageView setOpaque:isOpaque];
 	UIScreen *screen = [[self window] screen];

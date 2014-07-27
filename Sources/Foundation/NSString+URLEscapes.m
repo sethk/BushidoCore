@@ -15,18 +15,18 @@
 
 - (NSString *)stringByAddingURLEscapes
 {
-	return [AUTORELEASE((__bridge_transfer NSString *)CFURLCreateStringByAddingPercentEscapes(NULL,
+	return [(__bridge_transfer NSString *)CFURLCreateStringByAddingPercentEscapes(NULL,
 			(__bridge CFStringRef)self,
 			CFSTR(" "),
 			CFSTR("!*'();:@&=+$,/?%#[]"),
-			kCFStringEncodingUTF8)) stringByReplacingOccurrencesOfString:@" " withString:@"+"];
+			kCFStringEncodingUTF8) stringByReplacingOccurrencesOfString:@" " withString:@"+"];
 }
 
 - (NSString *)stringByReplacingURLEscapes
 {
-	return AUTORELEASE((__bridge_transfer NSString *)CFURLCreateStringByReplacingPercentEscapes(NULL,
+	return (__bridge_transfer NSString *)CFURLCreateStringByReplacingPercentEscapes(NULL,
 			(__bridge CFStringRef)[self stringByReplacingOccurrencesOfString:@"+" withString:@" "],
-			CFSTR("")));
+			CFSTR(""));
 }
 
 @end

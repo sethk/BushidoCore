@@ -6,7 +6,7 @@
 //  Copyright © 2006 Bushido Coding. All rights reserved.
 //
 
-#import <Cocoa/Cocoa.h>
+#import <AppKit/AppKit.h>
 
 @protocol BCHexContent
 

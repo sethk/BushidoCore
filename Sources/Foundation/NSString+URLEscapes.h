@@ -6,6 +6,8 @@
 //  Copyright © 2011 Bushido Coding, Inc. All rights reserved.
 //
 
+#import <Foundation/Foundation.h>
+
 @interface NSString (URLEscapes)
 
 - (NSString *)stringByAddingURLEscapes;

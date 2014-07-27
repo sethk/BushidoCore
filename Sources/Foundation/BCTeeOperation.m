@@ -14,7 +14,7 @@
 {
 	if ((self = [super init]))
 	{
-		_fileHandle = RETAIN(fileHandle);
+		_fileHandle = fileHandle;
 		_firstPipe = [NSPipe new];
 		_secondPipe = [NSPipe new];
 	}
@@ -47,15 +47,6 @@
 	[_fileHandle closeFile];
 	[firstHandle closeFile];
 	[secondHandle closeFile];
-}
-
-- (void)dealloc
-{
-	DESTROY(_fileHandle);
-	DESTROY(_firstPipe);
-	DESTROY(_secondPipe);
-
-	SUPER_DEALLOC();
 }
 
 - (NSFileHandle *)firstHandle

@@ -6,6 +6,8 @@
 //  Copyright © 2011 Bushido Coding, Inc. All rights reserved.
 //
 
+#import <Foundation/Foundation.h>
+
 @interface NSURL (Query)
 
 - (NSString *)valueForQueryKey:(NSString *)queryKey;

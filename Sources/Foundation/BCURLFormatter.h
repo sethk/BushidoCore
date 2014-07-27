@@ -7,6 +7,8 @@
 //	Based on URLFormatter from http://www.cocoadev.com/index.pl?URLFormatter
 //
 
+#import <Foundation/Foundation.h>
+
 @interface BCURLFormatter : NSFormatter
 
 @end

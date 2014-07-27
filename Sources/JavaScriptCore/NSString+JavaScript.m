@@ -13,12 +13,12 @@
 
 + stringWithJSString:(JSStringRef)JSString
 {
-	return AUTORELEASE([[self alloc] initWithJSString:JSString]);
+	return [[self alloc] initWithJSString:JSString];
 }
 
 + stringWithJSValue:(JSValueRef)JSValue inContext:(JSContextRef)context
 {
-	return AUTORELEASE([[self alloc] initWithJSValue:JSValue inContext:context]);
+	return [[self alloc] initWithJSValue:JSValue inContext:context];
 }
 
 + (NSString *)JSONStringFromValue:(JSValueRef)JSValue inContext:(JSContextRef)context

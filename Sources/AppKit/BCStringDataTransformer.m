@@ -19,12 +19,12 @@
 {
 	if (value)
 	{
-		NSString *text = AUTORELEASE([[NSString alloc] initWithData:value encoding:NSUTF8StringEncoding]);
+		NSString *text = [[NSString alloc] initWithData:value encoding:NSUTF8StringEncoding];
 		if (!text)
-			text = AUTORELEASE([[NSString alloc] initWithData:value encoding:NSASCIIStringEncoding]);
+			text = [[NSString alloc] initWithData:value encoding:NSASCIIStringEncoding];
 		NSDictionary *attributes = [NSDictionary dictionaryWithObject:[NSFont userFixedPitchFontOfSize:11.0]
 															   forKey:NSFontAttributeName];
-		return AUTORELEASE([[NSAttributedString alloc] initWithString:text attributes:attributes]);
+		return [[NSAttributedString alloc] initWithString:text attributes:attributes];
 	}
 	else
 		return @"";
