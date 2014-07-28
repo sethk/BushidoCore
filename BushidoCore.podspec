@@ -9,7 +9,6 @@ Pod::Spec.new do |s|
   s.requires_arc = true
   s.ios.deployment_target = '5.0'
   s.osx.deployment_target = '10.7'
-  s.preserve_paths = 'Configurations/*.xcconfig'
 
   s.default_subspec = 'Core'
   s.prefix_header_contents = '#import <BushidoCore/BCMacros.h>'
@@ -17,6 +16,7 @@ Pod::Spec.new do |s|
   s.subspec "Core" do |ss|
 	  ss.source_files = 'Sources/Core/*.[hm]'
 	  ss.public_header_files = 'Sources/Core/*.h'
+	  ss.preserve_paths = 'Configurations/*.xcconfig'
   end
 
   s.subspec "Foundation" do |ss|
