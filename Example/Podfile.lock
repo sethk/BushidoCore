@@ -1,0 +1,16 @@
+PODS:
+  - BushidoCore (0.1.1):
+    - BushidoCore/Core
+  - BushidoCore/Core (0.1.1)
+
+DEPENDENCIES:
+  - BushidoCore (from `..`)
+
+EXTERNAL SOURCES:
+  BushidoCore:
+    :path: ..
+
+SPEC CHECKSUMS:
+  BushidoCore: 77d525dd5edf548041fc69e0d7eb49ce61a37bda
+
+COCOAPODS: 0.32.1
