@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "BushidoCore"
-  s.version          = "0.1.2"
+  s.version          = "0.1.3"
   s.summary          = "Basic build configuration and macros for Bushido Coding apps"
   s.homepage         = "https://github.com/sethk/BushidoCore"
   s.license          = {:type => 'BSD'}
