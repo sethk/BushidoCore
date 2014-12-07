@@ -1,10 +1,7 @@
 platform :osx, "10.9"
 
-target "BushidoCoreExample" do
-    pod 'BushidoCore', path: '..'
-end
-
-target "BushidoCoreExampleTests" do
-
-end
-
+pod 'BushidoCore/Core', path: '..'
+pod 'BushidoCore/Foundation', path: '..'
+pod 'BushidoCore/AppKit', path: '..'
+pod 'BushidoCore/CoreGraphics', path: '..'
+pod 'BushidoCore/JavaScriptCore', path: '..'

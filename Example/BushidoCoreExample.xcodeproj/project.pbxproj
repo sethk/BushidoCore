@@ -10,6 +10,19 @@
 	<string>46</string>
 	<key>objects</key>
 	<dict>
+		<key>1761F4DE96BA114200E3BA8E</key>
+		<dict>
+			<key>explicitFileType</key>
+			<string>archive.ar</string>
+			<key>includeInIndex</key>
+			<string>0</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>path</key>
+			<string>libPods.a</string>
+			<key>sourceTree</key>
+			<string>BUILT_PRODUCTS_DIR</string>
+		</dict>
 		<key>190D46BBDC604644B11556BB</key>
 		<dict>
 			<key>buildActionMask</key>
@@ -40,6 +53,21 @@ fi
 			<key>showEnvVarsInLog</key>
 			<string>0</string>
 		</dict>
+		<key>211A122F8456B648A9BEB1CC</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>text.xcconfig</string>
+			<key>name</key>
+			<string>Pods.debug.xcconfig</string>
+			<key>path</key>
+			<string>Pods/Target Support Files/Pods/Pods.debug.xcconfig</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
 		<key>50FBF6AD88CF4CA0B3F9AC18</key>
 		<dict>
 			<key>explicitFileType</key>
@@ -53,14 +81,7 @@ fi
 			<key>sourceTree</key>
 			<string>BUILT_PRODUCTS_DIR</string>
 		</dict>
-		<key>5F7087C95DEB4FEBBAB4D913</key>
-		<dict>
-			<key>fileRef</key>
-			<string>50FBF6AD88CF4CA0B3F9AC18</string>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
-		</dict>
-		<key>CCBBFE0D552A4425A602D216</key>
+		<key>5A619F58C3619BA9CD8F9471</key>
 		<dict>
 			<key>includeInIndex</key>
 			<string>1</string>
@@ -69,11 +90,25 @@ fi
 			<key>lastKnownFileType</key>
 			<string>text.xcconfig</string>
 			<key>name</key>
-			<string>Pods-BushidoCoreExample.xcconfig</string>
+			<string>Pods.release.xcconfig</string>
 			<key>path</key>
-			<string>Pods/Pods-BushidoCoreExample.xcconfig</string>
+			<string>Pods/Target Support Files/Pods/Pods.release.xcconfig</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
+		</dict>
+		<key>5F7087C95DEB4FEBBAB4D913</key>
+		<dict>
+			<key>fileRef</key>
+			<string>50FBF6AD88CF4CA0B3F9AC18</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>6FB3EC79EF7913A013886556</key>
+		<dict>
+			<key>fileRef</key>
+			<string>1761F4DE96BA114200E3BA8E</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
 		</dict>
 		<key>DCFB3D8F169F4755889A2C42</key>
 		<dict>
@@ -94,10 +129,80 @@ fi
 			<key>shellPath</key>
 			<string>/bin/sh</string>
 			<key>shellScript</key>
-			<string>"${SRCROOT}/Pods/Pods-BushidoCoreExample-resources.sh"
+			<string>"${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh"
 </string>
 			<key>showEnvVarsInLog</key>
 			<string>0</string>
+		</dict>
+		<key>F8F08064EE7ADF565B254CBF</key>
+		<dict>
+			<key>children</key>
+			<array>
+				<string>211A122F8456B648A9BEB1CC</string>
+				<string>5A619F58C3619BA9CD8F9471</string>
+			</array>
+			<key>isa</key>
+			<string>PBXGroup</string>
+			<key>name</key>
+			<string>Pods</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>FD8448291A33E5B7000A9928</key>
+		<dict>
+			<key>fileEncoding</key>
+			<string>4</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>text.xcconfig</string>
+			<key>path</key>
+			<string>Debug.xcconfig</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>FD84482A1A33E5B7000A9928</key>
+		<dict>
+			<key>fileEncoding</key>
+			<string>4</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>text.xcconfig</string>
+			<key>path</key>
+			<string>Release.xcconfig</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>FD84482B1A33E5B7000A9928</key>
+		<dict>
+			<key>fileRef</key>
+			<string>FD8448291A33E5B7000A9928</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>FD84482C1A33E5B7000A9928</key>
+		<dict>
+			<key>fileRef</key>
+			<string>FD84482A1A33E5B7000A9928</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>FD84482D1A33E5C3000A9928</key>
+		<dict>
+			<key>children</key>
+			<array>
+				<string>FD8448291A33E5B7000A9928</string>
+				<string>FD84482A1A33E5B7000A9928</string>
+			</array>
+			<key>isa</key>
+			<string>PBXGroup</string>
+			<key>name</key>
+			<string>Configurations</string>
+			<key>path</key>
+			<string>../Configurations</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
 		</dict>
 		<key>FDEFF88E197F21B20085FF0A</key>
 		<dict>
@@ -105,9 +210,10 @@ fi
 			<array>
 				<string>FDEFF8A0197F21B20085FF0A</string>
 				<string>FDEFF8BE197F21B20085FF0A</string>
+				<string>FD84482D1A33E5C3000A9928</string>
 				<string>FDEFF899197F21B20085FF0A</string>
 				<string>FDEFF898197F21B20085FF0A</string>
-				<string>CCBBFE0D552A4425A602D216</string>
+				<string>F8F08064EE7ADF565B254CBF</string>
 			</array>
 			<key>isa</key>
 			<string>PBXGroup</string>
@@ -200,6 +306,7 @@ fi
 			<array>
 				<string>FDEFF89B197F21B20085FF0A</string>
 				<string>5F7087C95DEB4FEBBAB4D913</string>
+				<string>6FB3EC79EF7913A013886556</string>
 			</array>
 			<key>isa</key>
 			<string>PBXFrameworksBuildPhase</string>
@@ -214,7 +321,9 @@ fi
 			<array>
 				<string>FDEFF8A5197F21B20085FF0A</string>
 				<string>FDEFF8B3197F21B20085FF0A</string>
+				<string>FD84482C1A33E5B7000A9928</string>
 				<string>FDEFF8AB197F21B20085FF0A</string>
+				<string>FD84482B1A33E5B7000A9928</string>
 				<string>FDEFF8B1197F21B20085FF0A</string>
 			</array>
 			<key>isa</key>
@@ -284,6 +393,7 @@ fi
 				<string>FDEFF8B9197F21B20085FF0A</string>
 				<string>FDEFF89C197F21B20085FF0A</string>
 				<string>50FBF6AD88CF4CA0B3F9AC18</string>
+				<string>1761F4DE96BA114200E3BA8E</string>
 			</array>
 			<key>isa</key>
 			<string>PBXGroup</string>
@@ -807,6 +917,8 @@ fi
 		</dict>
 		<key>FDEFF8C6197F21B20085FF0A</key>
 		<dict>
+			<key>baseConfigurationReference</key>
+			<string>FD8448291A33E5B7000A9928</string>
 			<key>buildSettings</key>
 			<dict>
 				<key>ALWAYS_SEARCH_USER_PATHS</key>
@@ -878,6 +990,8 @@ fi
 		</dict>
 		<key>FDEFF8C7197F21B20085FF0A</key>
 		<dict>
+			<key>baseConfigurationReference</key>
+			<string>FD84482A1A33E5B7000A9928</string>
 			<key>buildSettings</key>
 			<dict>
 				<key>ALWAYS_SEARCH_USER_PATHS</key>
@@ -947,13 +1061,15 @@ fi
 			</array>
 			<key>defaultConfigurationIsVisible</key>
 			<string>0</string>
+			<key>defaultConfigurationName</key>
+			<string>Release</string>
 			<key>isa</key>
 			<string>XCConfigurationList</string>
 		</dict>
 		<key>FDEFF8C9197F21B20085FF0A</key>
 		<dict>
 			<key>baseConfigurationReference</key>
-			<string>CCBBFE0D552A4425A602D216</string>
+			<string>211A122F8456B648A9BEB1CC</string>
 			<key>buildSettings</key>
 			<dict>
 				<key>ASSETCATALOG_COMPILER_APPICON_NAME</key>
@@ -979,7 +1095,7 @@ fi
 		<key>FDEFF8CA197F21B20085FF0A</key>
 		<dict>
 			<key>baseConfigurationReference</key>
-			<string>CCBBFE0D552A4425A602D216</string>
+			<string>5A619F58C3619BA9CD8F9471</string>
 			<key>buildSettings</key>
 			<dict>
 				<key>ASSETCATALOG_COMPILER_APPICON_NAME</key>
@@ -1011,6 +1127,8 @@ fi
 			</array>
 			<key>defaultConfigurationIsVisible</key>
 			<string>0</string>
+			<key>defaultConfigurationName</key>
+			<string>Release</string>
 			<key>isa</key>
 			<string>XCConfigurationList</string>
 		</dict>

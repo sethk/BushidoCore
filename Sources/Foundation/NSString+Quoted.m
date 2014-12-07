@@ -85,12 +85,7 @@
 	if ([self length] <= length)
 		return self;
 	else
-		return [NSString stringWithFormat:@"%.*…", length, self];
+		return [[self substringToIndex:length - 1] stringByAppendingString:@"…"];
 }
 
 @end
-
-// Fix linker bug with loading categories from static libs:
-// http://blog.binaryfinery.com/universal-static-library-problem-in-iphone-sd
-@interface String_Quoted_Link_Helper @end
-@implementation String_Quoted_Link_Helper -init {return self;} @end

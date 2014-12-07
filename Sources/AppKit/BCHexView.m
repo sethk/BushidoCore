@@ -18,7 +18,7 @@ static NSString		*kBytesPrefix = @"  |";
 #define kBytesPrefixLength  3u
 static NSString		*kLineSuffix = @"|\n";
 #define kLineSuffixLength   2u
-static const unsigned	kCharsPerLine = kLinePrefixLength +
+static const NSUInteger	kCharsPerLine = kLinePrefixLength +
 	kBytesPerLine * kHexCharWidth +
 	kBytesPrefixLength + kBytesPerLine + kLineSuffixLength;
 
@@ -26,7 +26,7 @@ static const unsigned	kCharsPerLine = kLinePrefixLength +
 
 - (NSString *)hexDumpOfData:(NSData *)data;
 - (NSArray *)characterRangesFromByteRange:(NSRange)range;
-- (unsigned)byteIndexFromCharacterIndex:(unsigned)charIndex;
+- (NSUInteger)byteIndexFromCharacterIndex:(NSUInteger)charIndex;
 
 @end
 
@@ -37,11 +37,11 @@ static const unsigned	kCharsPerLine = kLinePrefixLength +
     NSMutableString *hexDump = [NSMutableString string];
     const u_char *bytes = [data bytes];
 
-    unsigned offset, length = [data length];
+    NSUInteger offset, length = [data length];
 
     for (offset = 0; offset < length; offset+= kBytesPerLine)
     {
-	unsigned i, numLineBytes = MIN(length - offset, kBytesPerLine);
+	NSUInteger i, numLineBytes = MIN(length - offset, kBytesPerLine);
 	const u_char *lineBytes = bytes + offset;
 
 	[hexDump appendFormat:kLinePrefixFormat, offset];
@@ -68,14 +68,14 @@ static const unsigned	kCharsPerLine = kLinePrefixLength +
 - (NSArray *)characterRangesFromByteRange:(NSRange)range
 {
     NSMutableArray *ranges = [NSMutableArray array];
-    unsigned line, offset, length, lineBytes;
+    NSUInteger line, offset, length, lineBytes;
 
     line = range.location / kBytesPerLine;
     offset = range.location % kBytesPerLine;
     for (length = range.length; length; length-= lineBytes, ++line)
     {
 	NSRange range;
-	unsigned lineOffset = line * kCharsPerLine + kLinePrefixLength;
+	NSUInteger lineOffset = line * kCharsPerLine + kLinePrefixLength;
 
 	lineBytes = MIN(length, kBytesPerLine - offset);
 	range.location = lineOffset + 1 + offset * kHexCharWidth;
@@ -93,10 +93,10 @@ static const unsigned	kCharsPerLine = kLinePrefixLength +
     return ranges;
 }
 
-- (unsigned)byteIndexFromCharacterIndex:(unsigned)charIndex
+- (NSUInteger)byteIndexFromCharacterIndex:(NSUInteger)charIndex
 {
-    unsigned line = charIndex / kCharsPerLine,
-	     lineOffset = charIndex % kCharsPerLine;
+    NSUInteger line = charIndex / kCharsPerLine,
+	       lineOffset = charIndex % kCharsPerLine;
 
     if (lineOffset >= kLinePrefixLength &&
 	    lineOffset < kLinePrefixLength + kBytesPerLine * kHexCharWidth)
@@ -115,14 +115,6 @@ static const unsigned	kCharsPerLine = kLinePrefixLength +
 @end
 
 @implementation BCHexView
-
-- (void)dealloc
-{
-    DESTROY(_contentObjectKeyPath);
-    DESTROY(_selectionIndexPathsKeyPath);
-
-    SUPER_DEALLOC();
-}
 
 - (void)bind:(NSString *)binding
     toObject:(id)observableController
@@ -208,16 +200,16 @@ static const unsigned	kCharsPerLine = kLinePrefixLength +
     NSWindow *window = [self window];
     NSPoint hitPoint = [self convertPoint:[theEvent locationInWindow]
 				 fromView:nil];
-    unsigned charIndex = [[self layoutManager] glyphIndexForPoint:hitPoint
+    NSUInteger charIndex = [[self layoutManager] glyphIndexForPoint:hitPoint
 						  inTextContainer:[self textContainer]],
-	    byteIndex = [self byteIndexFromCharacterIndex:charIndex];
+	       byteIndex = [self byteIndexFromCharacterIndex:charIndex];
     id<BCHexContent> contentObject = [self contentObject];
 
     if ([window firstResponder] != self)
 	[window makeFirstResponder:self];
 
 #if 1
-    NSLog(@"charIndex = %u, byteIndex = %u", charIndex, byteIndex);
+    NSLog(@"charIndex = %lu, byteIndex = %lu", charIndex, byteIndex);
 #endif // 0
 
     if (byteIndex != NSNotFound)

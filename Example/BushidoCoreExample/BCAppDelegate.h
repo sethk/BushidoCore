@@ -10,6 +10,6 @@
 
 @interface BCAppDelegate : NSObject <NSApplicationDelegate>
 
-@property (assign) IBOutlet NSWindow *window;
+@property (assign, readwrite, nonatomic) IBOutlet NSWindow *window;
 
 @end
